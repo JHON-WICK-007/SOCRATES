@@ -1,0 +1,38 @@
+The Problem: Layout Thrashing & Font Jank
+1. Layout Thrashing (Reflow)
+When you scale text or elements with transform: scale(), the browser recalculates layout on every frame. This causes the page to lag/stutter.
+2. Font Rendering Lag (Subpixel Antialiasing)
+When elements scale, fonts get blurry or flicker because subpixel rendering is recalculated. This is especially bad on text.
+3. Will-Change Misuse
+Using will-change: transform on too many elements actually makes it WORSE (GPU overhead).
+4. Missing GPU Acceleration
+Not using transform: translateZ(0) or backface-visibility: hidden means animations run on CPU, not GPU.
+5. No Font Smoothing
+Missing -webkit-font-smoothing: antialiased causes font jank on Chrome/Safari.
+
+Official CSS Terminology
+Layout Thrashing - When CSS properties trigger multiple reflows/repaints in quick succession
+Reflow - Browser recalculating layout (width, height, position)
+Repaint - Browser redrawing pixels (colors, borders, shadows)
+Jank - Visible stutter/lag during animations (FPS drops below 60)
+Subpixel Rendering - Anti-aliasing that causes font blur during transforms
+GPU Acceleration - Using hardware acceleration for 60fps animations
+Paint Thrashing - Excessive repainting of elements during animation
+
+Quick Fix Checklist
+Issue	Solution
+Icon/Font Jank	-webkit-font-smoothing: antialiased
+Lag During Hover	transform: translateZ(0) + backface-visibility: hidden
+Bouncy/Fuzzy Text	Don't scale text, use opacity instead
+Slow Animation	Use cubic-bezier(0.4, 0, 0.2, 1) + GPU accel
+Layout Shift	Only use transform, never width/padding/font-size
+Overusing will-change	Only on 1-2 elements that animate, remove from parent
+
+The Issue Has Multiple Names:
+
+Layout Thrashing - Main culprit (browser recalculating layout)
+Jank - The visible stutter you're seeing
+Paint Thrashing - Excessive repainting during animation
+Reflow - Layout recalculation on every frame
+Subpixel Rendering Jank - Font getting blurry during scale transforms
+GPU Acceleration Missing - Animation running on CPU instead of GPU

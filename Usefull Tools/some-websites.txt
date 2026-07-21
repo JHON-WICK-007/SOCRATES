@@ -1,0 +1,9 @@
+for icons = lottiefiles, lottieflow, lordicon, iconsax
+
+for font = fontjoy, 
+
+for illustration(diagram of the activity or some art) = undraw
+
+for mockups(realistic visual representation or model of a product,web page) = 
+
+for good animation or some good stuff = reactbits.dev, aceternity ui, magic ui, shadcn ui, Motion Primitives
