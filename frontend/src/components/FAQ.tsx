@@ -1,32 +1,42 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Minus } from 'lucide-react'
+import { fetchFAQs, FAQItem } from '../services/api'
+
+const DEFAULT_FAQS: FAQItem[] = [
+  {
+    q: 'How does Socratic AI differ from standard ChatGPT or search engines?',
+    a: 'Unlike general AI models that immediately give away raw code or answers, Socratic AI is engineered specifically for pedagogy. It analyzes your current knowledge level and prompts you with targeted sub-questions so you derive the concept yourself.',
+  },
+  {
+    q: 'How are human tutors verified on SOCRATES?',
+    a: 'Every human tutor undergoes a 3-stage vetting process: academic credentials verification (degree transcripts or research positions), a live technical teaching demonstration, and background checks.',
+  },
+  {
+    q: 'Can I combine AI study sessions with human tutors?',
+    a: 'Yes! That is the core architecture of SOCRATES. You can use Socratic AI to isolate your exact confusion points, and then book a targeted 20-minute session with a human tutor to resolve high-level intuition.',
+  },
+  {
+    q: 'Are peer study rooms free to join?',
+    a: 'Public peer study rooms are completely free for all registered SOCRATES users. Student Pro members can also spawn private invite-only study lounges.',
+  },
+  {
+    q: 'How are AI Session Recaps created?',
+    a: 'During live sessions, our AI transcribes audio and whiteboard notes in real time, automatically extracting key formulas, step-by-step algorithms, and downloadable flashcards.',
+  },
+]
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const [faqs, setFaqs] = useState<FAQItem[]>(DEFAULT_FAQS)
 
-  const faqs = [
-    {
-      q: 'How does Socratic AI differ from standard ChatGPT or search engines?',
-      a: 'Unlike general AI models that immediately give away raw code or answers, Socratic AI is engineered specifically for pedagogy. It analyzes your current knowledge level and prompts you with targeted sub-questions so you derive the concept yourself.',
-    },
-    {
-      q: 'How are human tutors verified on SOCRATES?',
-      a: 'Every human tutor undergoes a 3-stage vetting process: academic credentials verification (degree transcripts or research positions), a live technical teaching demonstration, and background checks.',
-    },
-    {
-      q: 'Can I combine AI study sessions with human tutors?',
-      a: 'Yes! That is the core architecture of SOCRATES. You can use Socratic AI to isolate your exact confusion points, and then book a targeted 20-minute session with a human tutor to resolve high-level intuition.',
-    },
-    {
-      q: 'Are peer study rooms free to join?',
-      a: 'Public peer study rooms are completely free for all registered SOCRATES users. Student Pro members can also spawn private invite-only study lounges.',
-    },
-    {
-      q: 'How are AI Session Recaps created?',
-      a: 'During live sessions, our AI transcribes audio and whiteboard notes in real time, automatically extracting key formulas, step-by-step algorithms, and downloadable flashcards.',
-    },
-  ]
+  useEffect(() => {
+    fetchFAQs().then((data) => {
+      if (data && data.length > 0) {
+        setFaqs(data)
+      }
+    })
+  }, [])
 
   return (
     <section className="py-24 sm:py-32 bg-white text-[#1d1d1f]">
@@ -81,3 +91,4 @@ export default function FAQ() {
     </section>
   )
 }
+

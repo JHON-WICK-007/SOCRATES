@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { fetchPlatformStats, StatItem } from '../services/api'
 
 interface StatItemProps {
   numericValue: number
@@ -46,13 +47,23 @@ function CounterStat({ numericValue, suffix, label }: StatItemProps) {
   )
 }
 
+const DEFAULT_STATS: StatItem[] = [
+  { numericValue: 50, suffix: 'K+', label: 'Students' },
+  { numericValue: 10, suffix: 'K+', label: 'Sessions' },
+  { numericValue: 2, suffix: 'K+', label: 'Tutors' },
+  { numericValue: 95, suffix: '%', label: 'Satisfaction' },
+]
+
 export default function Stats() {
-  const statsData = [
-    { numericValue: 50, suffix: 'K+', label: 'Students' },
-    { numericValue: 10, suffix: 'K+', label: 'Sessions' },
-    { numericValue: 2, suffix: 'K+', label: 'Tutors' },
-    { numericValue: 95, suffix: '%', label: 'Satisfaction' },
-  ]
+  const [statsData, setStatsData] = useState<StatItem[]>(DEFAULT_STATS)
+
+  useEffect(() => {
+    fetchPlatformStats().then((data) => {
+      if (data && data.length > 0) {
+        setStatsData(data)
+      }
+    })
+  }, [])
 
   return (
     <section className="py-24 sm:py-32 bg-white text-[#1d1d1f]">
@@ -71,3 +82,4 @@ export default function Stats() {
     </section>
   )
 }
+

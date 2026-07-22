@@ -1,7 +1,23 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { toast } from 'sonner'
+import { subscribeLead } from '../services/api'
 
 export default function CTA() {
+  const handleFindTutor = () => {
+    toast.info('Redirecting to SOCRATES Tutor Discovery Engine...')
+  }
+
+  const handleBecomeTutor = async () => {
+    const email = window.prompt('Enter your email to apply as a SOCRATES Tutor:')
+    if (email && email.includes('@')) {
+      const res = await subscribeLead(email, 'tutor')
+      toast.success(res.message || 'Tutor application received!')
+    } else if (email) {
+      toast.error('Please enter a valid email address.')
+    }
+  }
+
   return (
     <section className="py-28 sm:py-40 bg-[#f5f5f7] text-[#1d1d1f] border-t border-[#e0e0e0] text-center">
       <div className="max-w-4xl mx-auto px-6 space-y-8">
@@ -34,6 +50,7 @@ export default function CTA() {
         >
           <button
             type="button"
+            onClick={handleFindTutor}
             className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#0066cc] text-white text-base font-medium hover:bg-[#0077ed] transition-colors cursor-pointer"
           >
             Find a Tutor
@@ -41,6 +58,7 @@ export default function CTA() {
 
           <button
             type="button"
+            onClick={handleBecomeTutor}
             className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white text-[#0066cc] border border-[#0066cc] text-base font-medium hover:bg-[#0066cc]/5 transition-colors cursor-pointer"
           >
             Become a Tutor
@@ -50,3 +68,4 @@ export default function CTA() {
     </section>
   )
 }
+

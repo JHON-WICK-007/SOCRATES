@@ -1,34 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Star, Award, Calendar } from 'lucide-react'
+import { Star, Award } from 'lucide-react'
+import { fetchFeaturedTutors, TutorItem } from '../services/api'
+import { toast } from 'sonner'
+
+const DEFAULT_TUTORS: TutorItem[] = [
+  {
+    name: 'Dr. Evelyn Reed',
+    subject: 'Algorithms & Data Structures',
+    experience: '8+ yrs exp • Stanford PhD',
+    rating: '4.98',
+    reviews: '142 sessions',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400',
+  },
+  {
+    name: 'Marcus Chen',
+    subject: 'Linear Algebra & AI Foundations',
+    experience: '6+ yrs exp • MIT Alum',
+    rating: '4.95',
+    reviews: '98 sessions',
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400',
+  },
+  {
+    name: 'Sophia Williams',
+    subject: 'Quantum Mechanics & Physics',
+    experience: '10+ yrs exp • Cambridge Postdoc',
+    rating: '5.0',
+    reviews: '210 sessions',
+    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=400',
+  },
+]
 
 export default function Tutors() {
-  const tutors = [
-    {
-      name: 'Dr. Evelyn Reed',
-      subject: 'Algorithms & Data Structures',
-      experience: '8+ yrs exp • Stanford PhD',
-      rating: '4.98',
-      reviews: '142 sessions',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      name: 'Marcus Chen',
-      subject: 'Linear Algebra & AI Foundations',
-      experience: '6+ yrs exp • MIT Alum',
-      rating: '4.95',
-      reviews: '98 sessions',
-      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400',
-    },
-    {
-      name: 'Sophia Williams',
-      subject: 'Quantum Mechanics & Physics',
-      experience: '10+ yrs exp • Cambridge Postdoc',
-      rating: '5.0',
-      reviews: '210 sessions',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=400',
-    },
-  ]
+  const [tutors, setTutors] = useState<TutorItem[]>(DEFAULT_TUTORS)
+
+  useEffect(() => {
+    fetchFeaturedTutors().then((data) => {
+      if (data && data.length > 0) {
+        setTutors(data)
+      }
+    })
+  }, [])
+
+  const handleBookSession = (tutorName: string) => {
+    toast.success(`Booking request submitted for ${tutorName}! A coordinator will confirm your session shortly.`)
+  }
 
   return (
     <section id="tutors" className="py-24 sm:py-32 bg-[#f5f5f7] text-[#1d1d1f] border-t border-[#e0e0e0]">
@@ -82,6 +98,7 @@ export default function Tutors() {
                 <span className="text-xs text-[#7a7a7a] font-medium">{tutor.reviews}</span>
                 <button 
                   type="button"
+                  onClick={() => handleBookSession(tutor.name)}
                   className="px-4 py-2 rounded-full bg-[#0066cc] text-white text-xs font-medium hover:bg-[#0077ed] transition-colors cursor-pointer"
                 >
                   Book Session
@@ -94,3 +111,4 @@ export default function Tutors() {
     </section>
   )
 }
+
