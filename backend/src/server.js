@@ -44,6 +44,16 @@ app.use((err, req, res, next) => {
   res.status(500).json({ success: false, message: 'Internal Server Error', error: err.message });
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`[SOCRATES Backend] Server running on http://localhost:${PORT}`);
 });
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`[SOCRATES Backend Error] Port ${PORT} is already in use by another process.`);
+    console.error(`[Fix] Close the existing node process running on port ${PORT} or change process.env.PORT.`);
+  } else {
+    console.error('[SOCRATES Backend Error]', err);
+  }
+});
+

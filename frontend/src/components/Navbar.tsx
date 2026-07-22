@@ -1,4 +1,5 @@
 import React from 'react'
+import Logo from './Logo'
 
 export default function Navbar() {
   return (
@@ -7,12 +8,9 @@ export default function Navbar() {
         className="max-w-6xl mx-auto px-6 h-12 flex items-center justify-between text-xs font-normal text-[#1d1d1f]"
         aria-label="Global navigation"
       >
-        <div className="flex items-center gap-2 font-semibold text-sm tracking-tight text-[#1d1d1f]">
-          <span className="w-5 h-5 rounded-full bg-[#1d1d1f] text-white flex items-center justify-center font-bold text-[10px]">
-            S
-          </span>
-          <span>SOCRATES</span>
-        </div>
+        <a href="#" className="hover:opacity-90 transition-opacity">
+          <Logo size="sm" />
+        </a>
 
         <div className="hidden md:flex items-center gap-8 text-[#1d1d1f]/80">
           <a href="#why-socrates" className="hover:text-[#1d1d1f] transition-colors">Why SOCRATES</a>

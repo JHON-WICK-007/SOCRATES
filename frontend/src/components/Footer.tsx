@@ -1,9 +1,16 @@
 import React from 'react'
+import Logo from './Logo'
 
 export default function Footer() {
   return (
     <footer className="bg-white text-[#7a7a7a] text-xs pt-16 pb-12 border-t border-[#e0e0e0]">
       <div className="max-w-6xl mx-auto px-6 space-y-12">
+        {/* Brand Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-[#e0e0e0]">
+          <Logo size="md" />
+          <p className="text-xs text-[#7a7a7a]">Empowering global education with Socratic AI & world-class educators.</p>
+        </div>
+
         {/* Footnote text Apple style */}
         <div className="pb-8 border-b border-[#e0e0e0] leading-relaxed space-y-2">
           <p>
