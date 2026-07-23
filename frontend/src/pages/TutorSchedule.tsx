@@ -1,26 +1,22 @@
-import React, { useState, useMemo } from 'react'
-import { useParams, useNavigate, Link } from 'react-router-dom'
-import { 
-  ArrowLeft, 
-  Calendar as CalendarIcon, 
-  ChevronLeft, 
-  ChevronRight, 
-  Clock, 
-  CheckCircle2, 
-  ShieldCheck, 
-  Star, 
-  Video, 
-  BookOpen, 
-  Lock,
-  User,
-  Info,
-  Sparkles,
+import { AnimatePresence, motion, Variants } from 'framer-motion'
+import {
+  ArrowLeft,
+  BookOpen,
+  Calendar as CalendarIcon,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
   Globe,
+  Lock,
+  ShieldCheck,
+  Star,
   X
 } from 'lucide-react'
-import Navbar from '../components/Navbar'
+import React, { useMemo, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
-import { motion, AnimatePresence, Variants } from 'framer-motion'
+import Navbar from '../components/Navbar'
 
 // Mock Tutor Dataset (fallback for route lookup)
 const MOCK_TUTORS = [
@@ -513,7 +509,7 @@ export default function TutorSchedule() {
                         </div>
                       </div>
 
-                      <div className="space-y-2 pt-0.5">
+                                      <div className="space-y-1.5 pt-0.5">
                         <p className="text-[10px] text-[#7a7a7a] font-semibold uppercase tracking-wider">
                           Time Slots & Reservations:
                         </p>
@@ -554,9 +550,6 @@ export default function TutorSchedule() {
                             )}
                           </div>
                         ))}
-                        {day.status !== 'red' && !day.isPast && (
-                          <p className="text-[10px] text-[#7a7a7a] pt-1 font-medium text-center">Click date cell to select slot</p>
-                        )}
                       </div>
 
                       {/* Tooltip Side Pointer Arrow */}
