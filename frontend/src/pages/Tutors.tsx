@@ -3,6 +3,7 @@ import {
   BookOpen,
   Calendar,
   DollarSign,
+  RotateCcw,
   Search,
   ShieldCheck,
   Sparkles,
@@ -438,15 +439,17 @@ export default function Tutors() {
             </div>
             {(selectedSubject !== 'All' || searchQuery || minRating > 0 || maxPrice < 100) && (
               <button
+                type="button"
                 onClick={() => {
                   setSelectedSubject('All')
                   setSearchQuery('')
                   setMinRating(0)
                   setMaxPrice(100)
                 }}
-                className="text-xs font-semibold text-[#0066cc] hover:underline"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#f5f5f7] border border-[#e5e5e7] text-xs font-semibold text-[#525252] hover:text-[#1d1d1f] hover:bg-[#e8e8ed] active:bg-[#dcdce0] transition-colors duration-150 cursor-pointer select-none shrink-0 transform-gpu"
               >
-                Reset All Filters
+                <RotateCcw size={12} className="text-[#6e6e73]" />
+                <span>Reset All Filters</span>
               </button>
             )}
           </div>
