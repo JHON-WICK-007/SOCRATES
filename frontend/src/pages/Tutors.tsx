@@ -377,24 +377,25 @@ export default function Tutors() {
             {/* Secondary Filters Grid */}
             <div className="flex flex-wrap items-center justify-between gap-4 text-xs pt-2 border-t border-[#f0f0f2]">
               {/* Subject Dropdown & Quick Chips */}
-              <div className="flex flex-wrap items-center gap-2 max-w-full">
+              <div className="flex flex-wrap items-center gap-2 max-w-full shrink-0">
                 <CustomDropdown<string>
                   options={subjectDropdownOptions}
                   value={selectedSubject}
                   onChange={(val: string) => setSelectedSubject(val)}
-                  buttonClassName="py-1.5 w-[205px] sm:w-[215px] justify-between"
+                  buttonClassName="py-1.5 w-[205px] sm:w-[215px] justify-between shrink-0 select-none transform-gpu"
                   align="center"
+                  className="shrink-0"
                 />
 
-                <div className="hidden sm:flex items-center gap-1.5 overflow-x-auto">
+                <div className="hidden sm:flex items-center gap-1.5 shrink-0">
                   {allSubjects.slice(1, 6).map((sub) => (
                     <button
                       key={sub}
                       onClick={() => setSelectedSubject(sub)}
-                      className={`px-2.5 py-1 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+                      className={`px-2.5 py-1 rounded-xl font-medium text-xs transition-colors duration-150 shrink-0 cursor-pointer select-none transform-gpu border ${
                         selectedSubject === sub
-                          ? 'bg-[#0066cc] text-white shadow-xs'
-                          : 'bg-[#f5f5f7] border border-[#e5e5e7] text-[#525252] hover:bg-[#e0e0e0]/60'
+                          ? 'bg-[#0066cc] text-white border-[#0066cc] shadow-xs'
+                          : 'bg-[#f5f5f7] border-[#e5e5e7] text-[#525252] hover:bg-[#e0e0e0]/60'
                       }`}
                     >
                       {sub}
