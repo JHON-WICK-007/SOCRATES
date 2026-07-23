@@ -563,19 +563,42 @@ export default function TutorSchedule() {
               className="w-full max-w-lg bg-white border border-[#e0e0e0] rounded-3xl p-6 space-y-6 shadow-2xl relative text-[#1d1d1f]"
             >
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-[#e5e5e7] pb-3">
+              <div className="flex items-start justify-between border-b border-[#e5e5e7] pb-4">
                 <div className="flex items-center gap-3">
-                  <CalendarIcon size={18} className="text-[#0066cc]" />
-                  <div>
-                    <h3 className="text-base font-semibold text-[#1d1d1f]">
+                  <div className="w-10 h-10 rounded-2xl bg-[#0066cc]/10 text-[#0066cc] flex items-center justify-center shrink-0">
+                    <CalendarIcon size={20} />
+                  </div>
+                  <div className="space-y-0.5">
+                    <h3 className="text-base font-bold text-[#1d1d1f]">
                       Book Session with {tutor.name}
                     </h3>
-                    <p className="text-xs text-[#7a7a7a]">{selectedDay.fullDateStr}</p>
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
+                      <span className="font-semibold text-[#1d1d1f]">{selectedDay.fullDateStr}</span>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedDay(null)}
+                        className="text-[#0066cc] hover:underline font-semibold text-[11px]"
+                      >
+                        (Change Date)
+                      </button>
+                      <span className="px-2 py-0.5 rounded-full bg-[#0066cc]/10 text-[#0066cc] text-[10px] font-bold border border-[#0066cc]/20 flex items-center gap-1">
+                        <Globe size={10} />
+                        IST (UTC+5:30)
+                      </span>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                        selectedDay.status === 'green' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                        selectedDay.status === 'yellow' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                        'bg-red-50 text-red-700 border-red-200'
+                      }`}>
+                        {selectedDay.status === 'green' ? 'High Availability' : selectedDay.status === 'yellow' ? 'Limited (1-2 Left)' : 'Fully Booked'}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setSelectedDay(null)}
-                  className="p-1.5 rounded-full text-[#7a7a7a] hover:text-[#1d1d1f] hover:bg-[#f5f5f7] transition-colors cursor-pointer"
+                  className="p-1.5 rounded-full text-[#7a7a7a] hover:text-[#1d1d1f] hover:bg-[#f5f5f7] transition-colors cursor-pointer shrink-0"
                   title="Close modal"
                   aria-label="Close modal"
                 >
@@ -586,60 +609,82 @@ export default function TutorSchedule() {
               {/* Slot Selection Form */}
               <form onSubmit={handleConfirmBooking} className="space-y-5">
                 <div>
-                  <label className="block text-xs font-semibold text-[#1d1d1f] mb-2">
-                    Select Available Time Slot
-                  </label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-bold text-[#1d1d1f]">
+                      Select Time Slot
+                    </label>
+                    <span className="text-[11px] font-semibold text-[#6e6e73]">
+                      Duration: <strong className="text-[#1d1d1f]">60 min per slot</strong>
+                    </span>
+                  </div>
                   <div className="grid grid-cols-2 gap-2.5">
-                    {selectedDay.slots.map((slot, idx) => (
-                      <button
-                        key={idx}
-                        type="button"
-                        disabled={slot.isBooked}
-                        onClick={() => setSelectedSlot(slot)}
-                        className={`p-3 rounded-2xl border text-xs font-medium text-left flex flex-col justify-between gap-1 transition-all cursor-pointer ${
-                          slot.isBooked
-                            ? 'bg-[#f5f5f7] border-[#e0e0e0] text-[#a1a1a6] cursor-not-allowed opacity-60'
-                            : selectedSlot?.time === slot.time
-                            ? 'bg-[#0066cc] border-[#0066cc] text-white shadow-xs'
-                            : 'bg-white border-[#e5e5e7] text-[#1d1d1f] hover:border-[#0066cc]'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between font-mono font-semibold">
-                          <span>{slot.time}</span>
-                          {selectedSlot?.time === slot.time && <CheckCircle2 size={13} />}
-                        </div>
-                        <span className={`text-[10px] ${selectedSlot?.time === slot.time ? 'text-white/80' : 'text-[#7a7a7a]'}`}>
-                          {slot.subject}
-                        </span>
-                      </button>
-                    ))}
+                    {selectedDay.slots.map((slot, idx) => {
+                      const isSelected = selectedSlot?.time === slot.time
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          disabled={slot.isBooked}
+                          onClick={() => setSelectedSlot(slot)}
+                          className={`p-3 rounded-2xl border text-xs font-medium text-left flex flex-col justify-between gap-1.5 transition-all cursor-pointer select-none ${
+                            slot.isBooked
+                              ? 'bg-[#f5f5f7] border-[#e0e0e0] text-[#a1a1a6] cursor-not-allowed opacity-60'
+                              : isSelected
+                              ? 'bg-[#0066cc] border-[#0066cc] text-white shadow-xs'
+                              : 'bg-white border-[#e5e5e7] text-[#1d1d1f] hover:border-[#0066cc] hover:bg-[#0066cc]/5'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between font-mono font-bold">
+                            <span>{slot.time}</span>
+                            {isSelected ? (
+                              <CheckCircle2 size={13} className="text-white" />
+                            ) : (
+                              <span className="text-[10px] font-sans font-semibold text-[#6e6e73]">60m</span>
+                            )}
+                          </div>
+                          <span className={`text-[11px] font-semibold truncate ${isSelected ? 'text-white/95' : 'text-[#3a3a3c]'}`}>
+                            {slot.subject}
+                          </span>
+                        </button>
+                      )
+                    })}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#1d1d1f] mb-2">
-                    Learning Topic / Questions (Optional)
-                  </label>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-bold text-[#1d1d1f]">
+                      Learning Topic / Questions (Optional)
+                    </label>
+                    <span className="text-[10px] text-[#7a7a7a] font-medium">
+                      {bookingTopic.length}/250 chars
+                    </span>
+                  </div>
                   <textarea
                     value={bookingTopic}
+                    maxLength={250}
                     onChange={(e) => setBookingTopic(e.target.value)}
                     placeholder="e.g. Graph Traversal algorithms, BFS vs DFS prep..."
                     rows={3}
-                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f5f5f7] border border-[#e0e0e0] text-xs text-[#1d1d1f] placeholder-[#86868b] focus:outline-none focus:border-[#0066cc]"
+                    className="w-full px-3.5 py-2.5 rounded-2xl bg-[#f5f5f7] border border-[#e0e0e0] text-xs text-[#1d1d1f] placeholder-[#86868b] focus:outline-none focus:border-[#0066cc] focus:bg-white transition-colors"
                   />
                 </div>
 
-                <div className="pt-2 flex items-center justify-between gap-3 border-t border-[#f0f0f2]">
+                <div className="pt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-[#f0f0f2]">
                   <div>
-                    <span className="text-xs text-[#7a7a7a]">Total Fee: </span>
-                    <span className="text-lg font-bold text-[#1d1d1f]">${tutor.hourlyRate}</span>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-xs font-medium text-[#6e6e73]">Total Fee:</span>
+                      <span className="text-xl font-bold text-[#1d1d1f]">${tutor.hourlyRate}</span>
+                      <span className="text-xs text-[#6e6e73] font-medium">(1 hr session)</span>
+                    </div>
+                    <p className="text-[10px] text-[#7a7a7a]">Includes live Socratic video link & notes</p>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <button
                       type="button"
                       onClick={() => setSelectedDay(null)}
-                      className="px-4 py-2 rounded-xl text-xs font-semibold text-[#525252] hover:bg-[#f5f5f7]"
+                      className="px-4 py-2.5 rounded-xl border border-[#e5e5e7] hover:bg-[#f5f5f7] text-xs font-semibold text-[#525252] transition-colors cursor-pointer select-none"
                     >
                       Cancel
                     </button>
@@ -647,7 +692,7 @@ export default function TutorSchedule() {
                     <button
                       type="submit"
                       disabled={isSubmitting || !selectedSlot}
-                      className="px-5 py-2 rounded-xl bg-[#0066cc] hover:bg-[#0077ed] text-white text-xs font-semibold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                      className="px-5 py-2.5 rounded-xl bg-[#0066cc] hover:bg-[#0077ed] text-white text-xs font-semibold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50 select-none shrink-0"
                     >
                       {isSubmitting ? 'Confirming...' : 'Confirm & Book Slot'}
                     </button>
