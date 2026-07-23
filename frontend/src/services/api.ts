@@ -4,7 +4,16 @@ const API_BASE_URL = 'http://localhost:5000/api/v1'
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 5000,
+  timeout: 8000,
+})
+
+// Automatically attach JWT token to headers if present
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('socrates_token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
 })
 
 export interface StatItem {
@@ -70,5 +79,30 @@ export const subscribeLead = async (email: string, role: string = 'general') => 
     return response.data
   } catch (error) {
     return { success: true, message: 'Thank you for subscribing!' }
+  }
+}
+
+// Auth & User Profile API Endpoints
+export const fetchUserProfile = async () => {
+  try {
+    const response = await api.get('/auth/me')
+    return response.data?.user
+  } catch (error) {
+    return null
+  }
+}
+
+export const updateUserProfileApi = async (data: {
+  name?: string
+  bio?: string
+  subjects?: string[]
+  hourlyRate?: number
+  avatar?: string
+}) => {
+  try {
+    const response = await api.put('/auth/profile', data)
+    return response.data
+  } catch (error) {
+    return { success: false, message: 'Failed to update profile' }
   }
 }
