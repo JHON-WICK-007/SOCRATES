@@ -297,126 +297,122 @@ export default function Tutors() {
         </motion.p>
       </motion.section>
 
-      {/* Search & Filter Control Bar */}
-      <motion.section
+      {/* Unified Search & Tutor Grid Motion Container */}
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 max-w-6xl mx-auto px-6 mb-10"
       >
-        <motion.div variants={cardVariants} className="p-4 rounded-3xl bg-white border border-[#e5e5e7] shadow-sm space-y-4">
-          {/* Main Search Input */}
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7a7a7a] w-4 h-4" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by tutor name, subject (e.g. Algorithms, Linear Algebra, PyTorch)..."
-              className="w-full pl-11 pr-4 py-3 rounded-2xl bg-[#f5f5f7] border border-[#e0e0e0] text-sm text-[#1d1d1f] placeholder-[#86868b] focus:outline-none focus:border-[#0066cc] transition-colors"
-            />
-            {searchQuery && (
+        {/* Search & Filter Control Bar */}
+        <section className="relative z-10 max-w-6xl mx-auto px-6 mb-10">
+          <motion.div variants={cardVariants} className="p-4 rounded-3xl bg-white border border-[#e5e5e7] shadow-sm space-y-4">
+            {/* Main Search Input */}
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#7a7a7a] w-4 h-4" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by tutor name, subject (e.g. Algorithms, Linear Algebra, PyTorch)..."
+                className="w-full pl-11 pr-4 py-3 rounded-2xl bg-[#f5f5f7] border border-[#e0e0e0] text-sm text-[#1d1d1f] placeholder-[#86868b] focus:outline-none focus:border-[#0066cc] transition-colors"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#7a7a7a] hover:text-[#1d1d1f]"
+                >
+                  <X size={16} />
+                </button>
+              )}
+            </div>
+
+            {/* Secondary Filters Grid */}
+            <div className="flex flex-wrap items-center justify-between gap-4 text-xs pt-2 border-t border-[#f0f0f2]">
+              {/* Subject Dropdown & Quick Chips */}
+              <div className="flex flex-wrap items-center gap-2 max-w-full">
+                <CustomDropdown<string>
+                  options={subjectDropdownOptions}
+                  value={selectedSubject}
+                  onChange={(val: string) => setSelectedSubject(val)}
+                  icon={<Filter size={13} />}
+                  buttonClassName="py-1.5"
+                />
+
+                <div className="hidden sm:flex items-center gap-1.5 overflow-x-auto">
+                  {allSubjects.slice(1, 6).map((sub) => (
+                    <button
+                      key={sub}
+                      onClick={() => setSelectedSubject(sub)}
+                      className={`px-2.5 py-1 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+                        selectedSubject === sub
+                          ? 'bg-[#0066cc] text-white shadow-xs'
+                          : 'bg-[#f5f5f7] border border-[#e5e5e7] text-[#525252] hover:bg-[#e0e0e0]/60'
+                      }`}
+                    >
+                      {sub}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price & Rating Selectors */}
+              <div className="flex items-center gap-3">
+                <CustomDropdown<number>
+                  options={ratingOptions}
+                  value={minRating}
+                  onChange={(val: number) => setMinRating(val)}
+                  buttonClassName="py-1.5"
+                />
+
+                <CustomDropdown<number>
+                  options={priceOptions}
+                  value={maxPrice}
+                  onChange={(val: number) => setMaxPrice(val)}
+                  buttonClassName="py-1.5"
+                  align="right"
+                />
+              </div>
+            </div>
+          </motion.div>
+        </section>
+
+        {/* Tutors Grid Section */}
+        <section className="relative z-10 max-w-6xl mx-auto px-6">
+          <div className="flex items-center justify-between mb-6">
+            <div className="text-xs font-semibold text-[#7a7a7a]">
+              Showing <span className="text-[#1d1d1f]">{filteredTutors.length}</span> Verified Tutors
+            </div>
+            {(selectedSubject !== 'All' || searchQuery || minRating > 0 || maxPrice < 100) && (
               <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#7a7a7a] hover:text-[#1d1d1f]"
+                onClick={() => {
+                  setSelectedSubject('All')
+                  setSearchQuery('')
+                  setMinRating(0)
+                  setMaxPrice(100)
+                }}
+                className="text-xs font-semibold text-[#0066cc] hover:underline"
               >
-                <X size={16} />
+                Reset All Filters
               </button>
             )}
           </div>
 
-          {/* Secondary Filters Grid */}
-          <div className="flex flex-wrap items-center justify-between gap-4 text-xs pt-2 border-t border-[#f0f0f2]">
-            {/* Subject Dropdown & Quick Chips */}
-            <div className="flex flex-wrap items-center gap-2 max-w-full">
-              <CustomDropdown<string>
-                options={subjectDropdownOptions}
-                value={selectedSubject}
-                onChange={(val: string) => setSelectedSubject(val)}
-                icon={<Filter size={13} />}
-                buttonClassName="py-1.5"
-              />
-
-              <div className="hidden sm:flex items-center gap-1.5 overflow-x-auto">
-                {allSubjects.slice(1, 6).map((sub) => (
-                  <button
-                    key={sub}
-                    onClick={() => setSelectedSubject(sub)}
-                    className={`px-2.5 py-1 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
-                      selectedSubject === sub
-                        ? 'bg-[#0066cc] text-white shadow-xs'
-                        : 'bg-[#f5f5f7] border border-[#e5e5e7] text-[#525252] hover:bg-[#e0e0e0]/60'
-                    }`}
-                  >
-                    {sub}
-                  </button>
-                ))}
-              </div>
+          {filteredTutors.length === 0 ? (
+            <div className="p-12 text-center bg-white rounded-3xl border border-[#e5e5e7] space-y-3">
+              <UserCheck size={36} className="mx-auto text-[#7a7a7a]" />
+              <h3 className="text-lg font-display font-semibold text-[#1d1d1f]">No tutors matched your criteria</h3>
+              <p className="text-xs text-[#7a7a7a]">Try adjusting your search query or subject filters.</p>
             </div>
-
-            {/* Price & Rating Selectors */}
-            <div className="flex items-center gap-3">
-              <CustomDropdown<number>
-                options={ratingOptions}
-                value={minRating}
-                onChange={(val: number) => setMinRating(val)}
-                buttonClassName="py-1.5"
-              />
-
-              <CustomDropdown<number>
-                options={priceOptions}
-                value={maxPrice}
-                onChange={(val: number) => setMaxPrice(val)}
-                buttonClassName="py-1.5"
-                align="right"
-              />
-            </div>
-          </div>
-        </motion.div>
-      </motion.section>
-
-      {/* Tutors Grid Section */}
-      <section className="relative z-10 max-w-6xl mx-auto px-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="text-xs font-semibold text-[#7a7a7a]">
-            Showing <span className="text-[#1d1d1f]">{filteredTutors.length}</span> Verified Tutors
-          </div>
-          {(selectedSubject !== 'All' || searchQuery || minRating > 0 || maxPrice < 100) && (
-            <button
-              onClick={() => {
-                setSelectedSubject('All')
-                setSearchQuery('')
-                setMinRating(0)
-                setMaxPrice(100)
-              }}
-              className="text-xs font-semibold text-[#0066cc] hover:underline"
-            >
-              Reset All Filters
-            </button>
-          )}
-        </div>
-
-        {filteredTutors.length === 0 ? (
-          <div className="p-12 text-center bg-white rounded-3xl border border-[#e5e5e7] space-y-3">
-            <UserCheck size={36} className="mx-auto text-[#7a7a7a]" />
-            <h3 className="text-lg font-display font-semibold text-[#1d1d1f]">No tutors matched your criteria</h3>
-            <p className="text-xs text-[#7a7a7a]">Try adjusting your search query or subject filters.</p>
-          </div>
-        ) : (
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {filteredTutors.map((tutor) => (
-              <motion.div
-                key={tutor.id}
-                variants={cardVariants}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.2 }}
-                className="bg-white rounded-3xl border border-[#e5e5e7] p-6 space-y-5 flex flex-col justify-between shadow-xs hover:shadow-md hover:border-[#0066cc]/40 transition-all group"
-              >
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredTutors.map((tutor) => (
+                <motion.div
+                  key={tutor.id}
+                  variants={cardVariants}
+                  whileHover={{ y: -4 }}
+                  transition={{ duration: 0.2 }}
+                  className="bg-white rounded-3xl border border-[#e5e5e7] p-6 space-y-5 flex flex-col justify-between shadow-xs hover:shadow-md hover:border-[#0066cc]/40 transition-all group"
+                >
                 <div className="space-y-4">
                   {/* Top Card Header */}
                   <div className="flex items-start gap-4">
@@ -505,9 +501,10 @@ export default function Tutors() {
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         )}
       </section>
+      </motion.div>
 
       {/* BOOKING MODAL */}
       {selectedTutorForBooking && (
