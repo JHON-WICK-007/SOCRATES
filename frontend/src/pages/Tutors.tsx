@@ -428,7 +428,7 @@ export default function Tutors() {
 
         {/* Tutors Grid Section */}
         <section className="relative z-10 max-w-6xl mx-auto px-6">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6 px-3 sm:px-4">
             <div className="text-xs font-semibold text-[#7a7a7a] flex items-center gap-1.5 select-none">
               <span>Showing</span>
               <span className="font-bold text-[#1d1d1f] bg-[#f5f5f7] border border-[#e5e5e7] px-2 py-0.5 rounded-md text-[11px]">
