@@ -6,7 +6,7 @@ This file defines project-specific rules, style guidelines, and behavioral const
 - **Documentation Directory**: [docs/](file:///d:/SOCRATES/docs)
 - **Agent Config Backup in Docs**: [docs/.agents/AGENTS.md](file:///d:/SOCRATES/docs/.agents/AGENTS.md)
 - **Strict CSS Performance Rules**: [strict css.txt](file:///d:/SOCRATES/Usefull%20Tools/strict%20css.txt)
-- **Design Specifications**: [DESIGN-apple.md](file:///d:/SOCRATES/DESIGN-apple.md)
+- **Design Specifications**: [docs/DESIGN-apple.md](file:///d:/SOCRATES/docs/DESIGN-apple.md)
 - **Frontend App**: [frontend/](file:///d:/SOCRATES/frontend)
 - **Backend API**: [backend/](file:///d:/SOCRATES/backend)
 

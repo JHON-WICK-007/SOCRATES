@@ -6,7 +6,7 @@ SOCRATES is a full-stack educational platform built with React 19 + TypeScript o
 - **Documentation**: [docs/](file:///d:/SOCRATES/docs)
 - **Docs Agent Configs**: [docs/.claude/CLAUDE.md](file:///d:/SOCRATES/docs/.claude/CLAUDE.md)
 - **Strict CSS Performance Rules**: [strict css.txt](file:///d:/SOCRATES/Usefull%20Tools/strict%20css.txt)
-- **Design Guidelines**: [DESIGN-apple.md](file:///d:/SOCRATES/DESIGN-apple.md)
+- **Design Guidelines**: [docs/DESIGN-apple.md](file:///d:/SOCRATES/docs/DESIGN-apple.md)
 - **Frontend Source**: [frontend/](file:///d:/SOCRATES/frontend)
 - **Backend Source**: [backend/](file:///d:/SOCRATES/backend)
 
@@ -31,7 +31,7 @@ npm run seed     # Seed database
 - **UI & Performance Guidelines (MANDATORY)**:
   - You MUST strictly follow the anti-jank and performance rules in [strict css.txt](file:///d:/SOCRATES/Usefull%20Tools/strict%20css.txt).
   - Never use raw emojis as UI icons; use `lucide-react` or `react-icons`.
-  - Maintain dark/light mode polished Apple-inspired aesthetic ([DESIGN-apple.md](file:///d:/SOCRATES/DESIGN-apple.md)).
+  - Maintain dark/light mode polished Apple-inspired aesthetic ([docs/DESIGN-apple.md](file:///d:/SOCRATES/docs/DESIGN-apple.md)).
 - **API Guidelines**:
   - Express routes mapped under `/api/v1/`.
   - Controllers return `{ success: true, data: ... }` or pass errors to `express-async-errors`.

@@ -10,7 +10,7 @@ This document maps all AI agent configuration directories, guidelines, rules, an
 - **Primary Backend API**: [backend/](file:///d:/SOCRATES/backend) (Express.js + Node.js + MongoDB + Socket.IO - Port 5000)
 - **AI Microservice**: [ai-service/](file:///d:/SOCRATES/ai-service) (Python FastAPI + PyTorch/Gemini + RAG Vector Engine - Port 8000)
 - **Documentation Directory**: [docs/](file:///d:/SOCRATES/docs)
-- **Design Guidelines**: [DESIGN-apple.md](file:///d:/SOCRATES/DESIGN-apple.md)
+- **Design Guidelines**: [docs/DESIGN-apple.md](file:///d:/SOCRATES/docs/DESIGN-apple.md)
 - **Strict CSS Performance Rules**: [strict css.txt](file:///d:/SOCRATES/Usefull%20Tools/strict%20css.txt)
 
 ---
@@ -82,7 +82,7 @@ This document maps all AI agent configuration directories, guidelines, rules, an
 ## 📌 Critical Resource & Rule File Links
 
 - **Strict CSS Performance Guide**: [strict css.txt](file:///d:/SOCRATES/Usefull%20Tools/strict%20css.txt)
-- **Apple UI/UX Design System**: [DESIGN-apple.md](file:///d:/SOCRATES/DESIGN-apple.md)
+- **Apple UI/UX Design System**: [docs/DESIGN-apple.md](file:///d:/SOCRATES/docs/DESIGN-apple.md)
 - **Frontend App Directory**: [frontend/](file:///d:/SOCRATES/frontend)
 - **Backend API Directory**: [backend/](file:///d:/SOCRATES/backend)
 - **AI Microservice Directory**: [ai-service/](file:///d:/SOCRATES/ai-service)
