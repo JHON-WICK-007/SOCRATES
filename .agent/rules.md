@@ -1,0 +1,21 @@
+# Agent Rules & Guidelines
+
+## Associated Paths
+- **Strict CSS File**: [strict css.txt](file:///d:/SOCRATES/Usefull%20Tools/strict%20css.txt)
+- **Design Spec**: [DESIGN-apple.md](file:///d:/SOCRATES/DESIGN-apple.md)
+- **Frontend Workspace**: [frontend/](file:///d:/SOCRATES/frontend)
+- **Backend Workspace**: [backend/](file:///d:/SOCRATES/backend)
+
+## UI & Aesthetics
+- **No Raw Emojis in UI**: Never use raw Unicode emojis (e.g. 🚀, 🔒, ⭐) as UI icons. Use SVG vector icons from `lucide-react` or `react-icons`.
+- **Mandatory Strict CSS Rules**: You MUST follow all strict CSS performance, GPU acceleration, and anti-jank rules defined in [strict css.txt](file:///d:/SOCRATES/Usefull%20Tools/strict%20css.txt).
+  - **No Reflow Animations**: Animate ONLY `transform` and `opacity`. Never animate `width`, `height`, `margin`, `padding`, `top`, `left`.
+  - **Font Antialiasing**: Enforce `-webkit-font-smoothing: antialiased`.
+  - **GPU Layer Promotion**: Use `transform-gpu` (`transform: translateZ(0)`) to ensure 60fps animations.
+- **Component Design**: Keep UI components pure, accessible, and responsive across screens.
+
+## Code Quality & Standards
+- **TypeScript (Frontend)**: Strict type checking. Avoid `any` types; define explicit interfaces or types.
+- **JavaScript (Backend)**: Clean CommonJS code structure, clear function names, proper error propagation.
+- **API Contracts**: All API responses must follow a consistent JSON envelope `{ success: boolean, data?: any, message?: string, error?: string }`.
+- **Database**: Use Mongoose schemas with proper indexes and validation.

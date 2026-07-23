@@ -1,38 +1,184 @@
-The Problem: Layout Thrashing & Font Jank
-1. Layout Thrashing (Reflow)
-When you scale text or elements with transform: scale(), the browser recalculates layout on every frame. This causes the page to lag/stutter.
-2. Font Rendering Lag (Subpixel Antialiasing)
-When elements scale, fonts get blurry or flicker because subpixel rendering is recalculated. This is especially bad on text.
-3. Will-Change Misuse
-Using will-change: transform on too many elements actually makes it WORSE (GPU overhead).
-4. Missing GPU Acceleration
-Not using transform: translateZ(0) or backface-visibility: hidden means animations run on CPU, not GPU.
-5. No Font Smoothing
-Missing -webkit-font-smoothing: antialiased causes font jank on Chrome/Safari.
+# STRICT CSS PERFORMANCE & ANTI-JANK GUIDELINES
 
-Official CSS Terminology
-Layout Thrashing - When CSS properties trigger multiple reflows/repaints in quick succession
-Reflow - Browser recalculating layout (width, height, position)
-Repaint - Browser redrawing pixels (colors, borders, shadows)
-Jank - Visible stutter/lag during animations (FPS drops below 60)
-Subpixel Rendering - Anti-aliasing that causes font blur during transforms
-GPU Acceleration - Using hardware acceleration for 60fps animations
-Paint Thrashing - Excessive repainting of elements during animation
+---
 
-Quick Fix Checklist
-Issue	Solution
-Icon/Font Jank	-webkit-font-smoothing: antialiased
-Lag During Hover	transform: translateZ(0) + backface-visibility: hidden
-Bouncy/Fuzzy Text	Don't scale text, use opacity instead
-Slow Animation	Use cubic-bezier(0.4, 0, 0.2, 1) + GPU accel
-Layout Shift	Only use transform, never width/padding/font-size
-Overusing will-change	Only on 1-2 elements that animate, remove from parent
+## 1. Executive Summary & Diagnostics
 
-The Issue Has Multiple Names:
+When building rich, modern web applications (e.g. with React, Tailwind CSS v4, Framer Motion), UI interactions can suffer from visible stutter (**jank**), blurry text during hover/scale, and high CPU usage. 
 
-Layout Thrashing - Main culprit (browser recalculating layout)
-Jank - The visible stutter you're seeing
-Paint Thrashing - Excessive repainting during animation
-Reflow - Layout recalculation on every frame
-Subpixel Rendering Jank - Font getting blurry during scale transforms
-GPU Acceleration Missing - Animation running on CPU instead of GPU
+This document defines strict CSS rules and best practices to guarantee **60 FPS / 120 FPS buttery-smooth performance** and eliminate rendering defects.
+
+---
+
+## 2. Core Rendering Problems Defined
+
+| Problem Term | Description & Cause | Impact |
+| :--- | :--- | :--- |
+| **Layout Thrashing (Reflow)** | Triggering layout recalculations (width, height, margin, font-size, top/left) on every frame. | Severe CPU spikes & UI lag during transitions. |
+| **Paint Thrashing** | Forcing the browser to continuously re-render pixels and rasterize elements across composite layers. | Stuttery hover states & frame drops. |
+| **Subpixel Antialiasing Blur** | Scaling text containers via `transform: scale()`, which breaks subpixel font smoothing during transform. | Blurry, fuzzy, or flickering text/icons. |
+| **GPU Layer Bloat (`will-change`)** | Overusing `will-change: transform` on parent or many elements simultaneously. | Excessive VRAM/GPU memory consumption. |
+| **CPU-Bound Rendering** | Missing hardware acceleration layer promotion (`translateZ(0)` or `transform-gpu`). | Sluggish animations, especially on mobile devices. |
+
+---
+
+## 3. The 3-Step Browser Rendering Pipeline
+
+Understanding browser execution layers is key to high-performance CSS:
+
+```
+[ 1. Layout (Reflow) ] ➔ [ 2. Paint (Rasterize) ] ➔ [ 3. Composite (GPU) ]
+  Changes: width, height,  Changes: background,    Changes: transform,
+  margin, padding, top...  color, box-shadow...    opacity, filter...
+  ⚠️ (SLOWEST - CPU)       ⚠️ (MEDIUM - CPU)       ⚡ (FASTEST - GPU 60fps)
+```
+
+> **Strict Rule:** All interactive transitions & animations MUST run exclusively in the **Composite Layer** (Step 3).
+
+---
+
+## 4. Strict Performance Rules & Fixes
+
+### Rule 1: Use Composite-Only Properties for Animations
+- **NEVER animate:** `width`, `height`, `padding`, `margin`, `top`, `bottom`, `left`, `right`, `font-size`.
+- **ALWAYS animate:** `transform` (`scale`, `translate`, `rotate`) and `opacity`.
+
+#### Bad:
+```css
+.card {
+  transition: width 0.3s ease, height 0.3s ease, top 0.3s ease;
+}
+.card:hover {
+  width: 320px;
+  top: -10px; /* Triggers Reflow! */
+}
+```
+
+#### Good (Tailwind CSS v4 & Standard CSS):
+```html
+<!-- Tailwind v4 -->
+<div class="transition-transform duration-200 ease-out hover:-translate-y-2 hover:scale-[1.02] transform-gpu">
+  ...
+</div>
+```
+
+---
+
+### Rule 2: Font Smoothing & Antialiasing
+Always enforce antialiased font rendering globally to prevent font weight shifts and fuzzy text during rendering.
+
+```css
+/* Standard CSS */
+html, body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+```
+
+In Tailwind CSS v4:
+```html
+<body class="antialiased text-rendering-optimize">
+```
+
+---
+
+### Rule 3: Hardware (GPU) Acceleration Layer Promotion
+Promote interactive card elements, modals, drop-downs, and floating navigation bars to GPU composition layers.
+
+```css
+/* Force GPU Layer Creation without affecting visual positioning */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+```
+
+In Tailwind CSS v4:
+```html
+<div class="transform-gpu backface-hidden">
+  ...
+</div>
+```
+
+---
+
+### Rule 4: Prevent Text Blur During Scale Transforms
+When applying scale transforms to containers containing text:
+1. Avoid aggressive scale factors (`scale(1.15)` or higher). Keep subtle scale increments (`scale(1.02)` or `scale(1.03)`).
+2. Alternatively, animate background colors or opacity instead of scaling raw text elements.
+3. If scaling text is mandatory, add GPU layer isolation:
+
+```css
+.scale-text-fix {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+```
+
+---
+
+### Rule 5: Controlled Use of `will-change`
+- **DO NOT** apply `will-change: transform` permanently in base CSS classes for dozens of items.
+- **DO** apply `will-change` only on active hover or 1-2 key focal elements (e.g. active modal, hero card).
+
+#### Bad:
+```css
+/* BAD: Over-allocates GPU memory for every list item */
+.list-item {
+  will-change: transform, opacity, width, height;
+}
+```
+
+#### Good:
+```css
+/* GOOD: Isolated to element being interacted with */
+.hero-card:hover {
+  will-change: transform;
+}
+```
+
+In Tailwind CSS v4:
+```html
+<div class="will-change-transform hover:will-change-transform">
+```
+
+---
+
+## 5. Quick Fix Checklist Matrix
+
+| Issue Symptom | Root Cause | Strict Fix / Remedy |
+| :--- | :--- | :--- |
+| **Icon or Font Flicker** | Missing subpixel antialiasing | Apply `-webkit-font-smoothing: antialiased` (`antialiased` in Tailwind). |
+| **Stutter/Lag on Hover** | CPU painting on main thread | Add `transform: translateZ(0)` & `backface-visibility: hidden` (`transform-gpu`). |
+| **Bouncy / Blurry Text** | Subpixel rasterization shift | Use subtle scale (`scale(1.02)`) or transition `opacity`/`box-shadow` instead. |
+| **Slow/Choppy Animation** | Linear timing & no GPU layer | Use `cubic-bezier(0.4, 0, 0.2, 1)` + GPU layer promotion. |
+| **Page Layout Shift** | Animating `top`, `left`, or `margin` | Replace with `transform: translate(x, y)` (`hover:translate-x-* hover:translate-y-*`). |
+| **VRAM / Browser Crash** | `will-change` on too many elements | Scope `will-change` strictly to animating element on hover state only. |
+
+---
+
+## 6. Recommended Global CSS Baseline
+
+Include this snippet in `frontend/src/index.css`:
+
+```css
+@layer base {
+  html, body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* GPU accelerated transition helpers */
+  .gpu-layer {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+}
+```
+
+---
+*SOCRATES Strict CSS Performance Standards - Ready for AI Agent Enforcement*

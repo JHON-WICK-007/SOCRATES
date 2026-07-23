@@ -24,8 +24,6 @@ out/
 !*.env.example
 
 # Editor / OS files
-.vscode/*
-!.vscode/extensions.json
 .idea
 .DS_Store
 *.suo

@@ -1,0 +1,29 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "dev",
+      "path": "frontend/",
+      "problemMatcher": [],
+      "label": "npm: dev - frontend",
+      "detail": "vite"
+    },
+    {
+      "type": "npm",
+      "script": "dev",
+      "path": "backend/",
+      "problemMatcher": [],
+      "label": "npm: dev - backend",
+      "detail": "nodemon src/server.js"
+    },
+    {
+      "type": "npm",
+      "script": "seed",
+      "path": "backend/",
+      "problemMatcher": [],
+      "label": "npm: seed - backend",
+      "detail": "node src/utils/seed.js"
+    }
+  ]
+}

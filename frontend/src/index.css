@@ -12,6 +12,13 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* GPU Accelerated Layer Helpers */
+.gpu-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 #root {

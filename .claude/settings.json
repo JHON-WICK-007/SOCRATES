@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allowRunCommand": true,
+    "allowReadFile": true,
+    "allowWriteFile": true
+  },
+  "preferredTools": [
+    "ripgrep",
+    "git"
+  ]
+}
