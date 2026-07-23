@@ -14,7 +14,9 @@ import {
   Lock,
   User,
   Info,
-  Sparkles
+  Sparkles,
+  Globe,
+  X
 } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import { toast } from 'sonner'
@@ -356,16 +358,21 @@ export default function TutorSchedule() {
 
         {/* Monthly Calendar View */}
         <motion.div variants={cardVariants} className="bg-white rounded-3xl border border-[#e5e5e7] p-6 sm:p-8 shadow-xs space-y-6">
-          {/* Month Header Controls */}
-          <div className="flex items-center justify-between border-b border-[#f0f0f2] pb-6">
-            <div className="flex items-center gap-3">
+          {/* Month Header Controls & Timezone Badge */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#f0f0f2] pb-6 gap-4">
+            <div className="flex flex-wrap items-center gap-3">
               <CalendarIcon size={20} className="text-[#0066cc]" />
               <h2 className="text-lg sm:text-xl font-semibold text-[#1d1d1f] tracking-tight">{monthYearHeader} Schedule</h2>
+              <span className="px-2.5 py-1 rounded-full bg-[#0066cc]/10 border border-[#0066cc]/20 text-xs font-semibold text-[#0066cc] flex items-center gap-1.5 shrink-0">
+                <Globe size={13} className="text-[#0066cc]" />
+                <span>IST (UTC+5:30)</span>
+              </span>
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrevMonth}
+                aria-label="Previous Month"
                 className="p-2 rounded-xl border border-[#e5e5e7] text-[#1d1d1f] hover:bg-[#f5f5f7] transition-colors cursor-pointer"
                 title="Previous Month"
               >
@@ -373,6 +380,7 @@ export default function TutorSchedule() {
               </button>
               <button
                 onClick={handleNextMonth}
+                aria-label="Next Month"
                 className="p-2 rounded-xl border border-[#e5e5e7] text-[#1d1d1f] hover:bg-[#f5f5f7] transition-colors cursor-pointer"
                 title="Next Month"
               >
@@ -396,7 +404,12 @@ export default function TutorSchedule() {
           <div className="grid grid-cols-7 gap-2 sm:gap-3">
             {calendarDays.map((day, idx) => {
               if (!day) {
-                return <div key={`empty-${idx}`} className="h-20 sm:h-24 rounded-2xl bg-[#fafafc]/50" />
+                return (
+                  <div
+                    key={`empty-${idx}`}
+                    className="h-20 sm:h-24 rounded-2xl bg-[#fafafc] border border-[#f0f0f2]/60"
+                  />
+                )
               }
 
               // Color styles based on status
@@ -404,7 +417,7 @@ export default function TutorSchedule() {
                 green: 'bg-emerald-50/70 border-emerald-200/80 text-emerald-950 hover:bg-emerald-100/80 hover:border-emerald-300 cursor-pointer',
                 yellow: 'bg-amber-50/70 border-amber-200/80 text-amber-950 hover:bg-amber-100/80 hover:border-amber-300 cursor-pointer',
                 red: 'bg-rose-50/50 border-rose-200/50 text-rose-400 cursor-not-allowed opacity-75',
-                past: 'bg-[#f0f0f2]/70 border-[#e0e0e3] text-[#a1a1a6] opacity-45 cursor-not-allowed filter grayscale'
+                past: 'bg-[repeating-linear-gradient(45deg,#f5f5f7,#f5f5f7_6px,#e8e8ed_6px,#e8e8ed_12px)] border-[#d2d2d7] text-[#8e8e93] opacity-60 cursor-not-allowed'
               }
 
               const badgeStyles = {
@@ -428,12 +441,12 @@ export default function TutorSchedule() {
                     onMouseLeave={() => setHoveredDay(null)}
                     className={`w-full h-20 sm:h-24 rounded-2xl p-2.5 sm:p-3 border flex flex-col justify-between transition-all text-left select-none ${statusStyles[day.status]}`}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs sm:text-sm font-semibold">{day.date}</span>
-                      <span className={`w-2.5 h-2.5 rounded-full ${badgeStyles[day.status]}`} />
+                    <div className="flex items-center justify-between w-full">
+                      <span className="text-xs sm:text-sm font-bold">{day.date}</span>
+                      <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${badgeStyles[day.status]}`} />
                     </div>
 
-                    <div className="text-[10px] sm:text-xs font-medium truncate opacity-90">
+                    <div className="text-[10px] sm:text-xs font-semibold truncate opacity-90">
                       {day.isPast && 'Past Date'}
                       {!day.isPast && day.status === 'green' && `${day.slots.length} slots`}
                       {!day.isPast && day.status === 'yellow' && `${day.slots.filter(s => !s.isBooked).length} left`}
@@ -441,42 +454,56 @@ export default function TutorSchedule() {
                     </div>
                   </button>
 
-                  {/* SIDE HOVER TOOLTIP (Right/Left Positioned) */}
+                  {/* SIDE HOVER / CLICK TOOLTIP POPOVER (Positioned intelligently with explicit X Close Button) */}
                   {hoveredDay?.date === day.date && (
                     <div className={`absolute top-1/2 -translate-y-1/2 ${
                       day.dayOfWeek >= 5 ? 'right-full mr-3' : 'left-full ml-3'
-                    } w-64 p-3.5 bg-white text-[#1d1d1f] text-xs rounded-2xl shadow-2xl z-50 pointer-events-none space-y-2 border border-[#e5e5e7] animate-in fade-in duration-150`}>
-                      <div className="flex items-center justify-between border-b border-[#f0f0f2] pb-2">
-                        <span className="font-semibold text-[#1d1d1f] text-xs">{day.fullDateStr}</span>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
-                          day.isPast ? 'bg-gray-100 text-gray-600 border-gray-200' :
-                          day.status === 'green' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
-                          day.status === 'yellow' ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                          'bg-rose-50 text-rose-600 border-rose-200'
-                        }`}>
-                          {day.isPast ? 'Past Date' : day.status === 'green' ? 'Available' : day.status === 'yellow' ? 'Limited' : 'Fully Booked'}
-                        </span>
+                    } w-72 p-4 bg-white text-[#1d1d1f] text-xs rounded-2xl shadow-2xl z-50 pointer-events-auto space-y-3 border border-[#e5e5e7] animate-in fade-in duration-150`}>
+                      <div className="flex items-center justify-between border-b border-[#f0f0f2] pb-2.5">
+                        <span className="font-bold text-[#1d1d1f] text-xs">{day.fullDateStr}</span>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                            day.isPast ? 'bg-gray-100 text-gray-600 border-gray-200' :
+                            day.status === 'green' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                            day.status === 'yellow' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                            'bg-rose-50 text-rose-600 border-rose-200'
+                          }`}>
+                            {day.isPast ? 'Past Date' : day.status === 'green' ? 'Available' : day.status === 'yellow' ? 'Limited' : 'Fully Booked'}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setHoveredDay(null)
+                            }}
+                            className="p-1 rounded-full text-[#7a7a7a] hover:text-[#1d1d1f] hover:bg-[#f5f5f7] cursor-pointer"
+                            title="Close details"
+                            aria-label="Close popover"
+                          >
+                            <X size={14} />
+                          </button>
+                        </div>
                       </div>
 
-                      <div className="space-y-1.5 pt-0.5">
+                      <div className="space-y-2 pt-0.5">
                         <p className="text-[10px] text-[#7a7a7a] font-semibold uppercase tracking-wider">
                           Time Slots & Reservations:
                         </p>
                         {day.slots.map((slot, sIdx) => (
                           <div 
                             key={sIdx} 
-                            className={`p-2 rounded-xl border text-[11px] space-y-0.5 ${
+                            className={`p-2.5 rounded-xl border text-[11px] space-y-1 min-h-[46px] flex flex-col justify-center ${
                               slot.isBooked 
                                 ? 'bg-rose-50/50 border-rose-200/70 text-rose-950' 
                                 : 'bg-[#fafafc] border-[#e8e8ed] text-[#1d1d1f]'
                             }`}
                           >
                             <div className="flex items-center justify-between">
-                              <span className="flex items-center gap-1 font-mono font-semibold text-[10px]">
-                                <Clock size={10} className={slot.isBooked ? 'text-rose-500' : 'text-[#0066cc]'} />
+                              <span className="flex items-center gap-1 font-mono font-semibold text-[11px]">
+                                <Clock size={11} className={slot.isBooked ? 'text-rose-500' : 'text-[#0066cc]'} />
                                 {slot.time}
                               </span>
-                              <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded ${
+                              <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
                                 slot.isBooked ? 'bg-rose-100/80 text-rose-700' : 'bg-emerald-100/70 text-emerald-700'
                               }`}>
                                 {slot.isBooked ? 'Reserved' : 'Open'}
@@ -484,19 +511,22 @@ export default function TutorSchedule() {
                             </div>
 
                             {slot.isBooked ? (
-                              <div className="flex items-center gap-1.5 text-[10px] text-rose-800 font-medium truncate pt-0.5">
+                              <div 
+                                title={slot.bookedBy}
+                                className="flex items-center gap-1.5 text-[10px] text-rose-800 font-medium truncate pt-0.5 cursor-help"
+                              >
                                 <Lock size={10} className="text-rose-500 shrink-0" />
                                 <span className="truncate">Booked by <strong className="font-semibold text-rose-950">{slot.bookedBy}</strong></span>
                               </div>
                             ) : (
-                              <div className="flex items-center gap-1.5 text-[10px] text-[#0066cc] font-medium truncate pt-0.5">
-                                <BookOpen size={10} className="text-[#0066cc] shrink-0" />
-                                <span className="truncate">Subject: <strong className="font-semibold">{slot.subject}</strong></span>
+                              <div className="flex items-center gap-1.5 text-[10px] text-[#525252] font-medium truncate pt-0.5">
+                                <BookOpen size={10} className="text-[#6e6e73] shrink-0" />
+                                <span className="truncate">Subject: <strong className="font-semibold text-[#1d1d1f]">{slot.subject}</strong></span>
                               </div>
                             )}
                           </div>
                         ))}
-                        {day.status !== 'red' && (
+                        {day.status !== 'red' && !day.isPast && (
                           <p className="text-[10px] text-[#0066cc] pt-1 font-semibold text-center">Click date cell to select slot</p>
                         )}
                       </div>
@@ -545,9 +575,11 @@ export default function TutorSchedule() {
                 </div>
                 <button
                   onClick={() => setSelectedDay(null)}
-                  className="p-1 rounded-full text-[#7a7a7a] hover:text-[#1d1d1f] hover:bg-[#f5f5f7]"
+                  className="p-1.5 rounded-full text-[#7a7a7a] hover:text-[#1d1d1f] hover:bg-[#f5f5f7] transition-colors cursor-pointer"
+                  title="Close modal"
+                  aria-label="Close modal"
                 >
-                  <ArrowLeft size={16} />
+                  <X size={18} />
                 </button>
               </div>
 
