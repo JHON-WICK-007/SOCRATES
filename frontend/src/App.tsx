@@ -13,7 +13,7 @@ import './App.css'
 function App() {
   return (
     <BrowserRouter>
-      <Toaster position="top-right" richColors />
+      <Toaster position="top-right" richColors duration={1800} closeButton />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
