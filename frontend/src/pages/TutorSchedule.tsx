@@ -138,6 +138,7 @@ export default function TutorSchedule() {
   const [hoveredDay, setHoveredDay] = useState<DaySchedule | null>(null)
   const [selectedDay, setSelectedDay] = useState<DaySchedule | null>(null)
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null)
+  const [selectedDuration, setSelectedDuration] = useState<20 | 30 | 60>(60)
   const [bookingTopic, setBookingTopic] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -602,13 +603,53 @@ export default function TutorSchedule() {
 
               {/* Slot Selection Form */}
               <form onSubmit={handleConfirmBooking} className="space-y-5">
+                {/* Session Duration Selector (20 Min, 30 Min, 60 Min) */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="text-xs font-bold text-[#1d1d1f] flex items-center gap-1.5">
+                      <Clock size={13} className="text-[#0066cc]" />
+                      <span>Select Session Duration</span>
+                    </label>
+                    <span className="text-[11px] font-semibold text-[#6e6e73]">
+                      Pro-rated pricing
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { minutes: 20, label: '20 Min', desc: 'Quick Doubt', factor: 20 / 60 },
+                      { minutes: 30, label: '30 Min', desc: 'Concept Review', factor: 30 / 60 },
+                      { minutes: 60, label: '60 Min', desc: 'Full Session', factor: 1.0 },
+                    ].map((dur) => {
+                      const isSelected = selectedDuration === dur.minutes
+                      const calculatedFee = Math.round(tutor.hourlyRate * dur.factor)
+
+                      return (
+                        <button
+                          key={dur.minutes}
+                          type="button"
+                          onClick={() => setSelectedDuration(dur.minutes as 20 | 30 | 60)}
+                          className={`p-2.5 rounded-2xl border text-center transition-colors duration-150 cursor-pointer select-none transform-gpu flex flex-col items-center gap-0.5 ${
+                            isSelected
+                              ? 'bg-[#0066cc]/10 border-[#0066cc] text-[#0066cc] ring-1 ring-[#0066cc]'
+                              : 'bg-[#fafafc] border-[#e5e5e7] text-[#525252] hover:bg-[#f5f5f7]'
+                          }`}
+                        >
+                          <span className="text-xs font-bold">{dur.label}</span>
+                          <span className="text-[10px] font-medium text-[#7a7a7a]">{dur.desc}</span>
+                          <span className="text-[11px] font-extrabold text-[#1d1d1f] pt-0.5">${calculatedFee}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-xs font-bold text-[#1d1d1f]">
-                      Select Time Slot
+                      Select Available Time Slot
                     </label>
                     <span className="text-[11px] font-semibold text-[#6e6e73]">
-                      Duration: <strong className="text-[#1d1d1f]">60 min per slot</strong>
+                      Duration: <strong className="text-[#1d1d1f]">{selectedDuration} min per slot</strong>
                     </span>
                   </div>
                   <div className="grid grid-cols-2 gap-2.5">
@@ -642,7 +683,7 @@ export default function TutorSchedule() {
                               <CheckCircle2 size={18} className="text-white shrink-0" />
                             ) : (
                               <span className="text-[10px] font-sans font-semibold px-2 py-0.5 rounded-full bg-[#f5f5f7] text-[#6e6e73] border border-[#e5e5e7] shrink-0">
-                                60m
+                                {selectedDuration}m
                               </span>
                             )}
                           </div>
@@ -675,8 +716,10 @@ export default function TutorSchedule() {
                   <div>
                     <div className="flex items-baseline gap-1">
                       <span className="text-xs font-medium text-[#6e6e73]">Total Fee:</span>
-                      <span className="text-xl font-bold text-[#1d1d1f]">${tutor.hourlyRate}</span>
-                      <span className="text-xs text-[#6e6e73] font-medium">(1 hr session)</span>
+                      <span className="text-xl font-bold text-[#1d1d1f]">
+                        ${Math.round((tutor.hourlyRate * selectedDuration) / 60)}
+                      </span>
+                      <span className="text-xs text-[#6e6e73] font-medium">({selectedDuration} min session)</span>
                     </div>
                     <p className="text-[10px] text-[#7a7a7a]">Includes live Socratic video link & notes</p>
                   </div>

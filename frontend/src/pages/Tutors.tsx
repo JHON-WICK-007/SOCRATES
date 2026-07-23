@@ -184,6 +184,7 @@ export default function Tutors() {
   const [bookingDate, setBookingDate] = useState('')
   const [bookingTime, setBookingTime] = useState('14:00')
   const [bookingTopic, setBookingTopic] = useState('')
+  const [selectedDuration, setSelectedDuration] = useState<20 | 30 | 60>(60)
   const [isBookingSubmitting, setIsBookingSubmitting] = useState(false)
   const [expandedCardIds, setExpandedCardIds] = useState<Record<string, boolean>>({})
 
@@ -609,6 +610,38 @@ export default function Tutors() {
             </div>
 
             <form onSubmit={handleConfirmBooking} className="space-y-4 text-xs">
+              {/* Session Duration Selector (20 Min, 30 Min, 60 Min) */}
+              <div>
+                <label className="text-[#525252] font-semibold block mb-1.5">Select Session Duration</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { minutes: 20, label: '20 Min', desc: 'Quick Doubt', factor: 20 / 60 },
+                    { minutes: 30, label: '30 Min', desc: 'Concept Review', factor: 30 / 60 },
+                    { minutes: 60, label: '60 Min', desc: 'Full Session', factor: 1.0 },
+                  ].map((dur) => {
+                    const isSelected = selectedDuration === dur.minutes
+                    const calculatedFee = Math.round(selectedTutorForBooking.hourlyRate * dur.factor)
+
+                    return (
+                      <button
+                        key={dur.minutes}
+                        type="button"
+                        onClick={() => setSelectedDuration(dur.minutes as 20 | 30 | 60)}
+                        className={`p-2 rounded-xl border text-center transition-colors duration-150 cursor-pointer select-none flex flex-col items-center gap-0.5 ${
+                          isSelected
+                            ? 'bg-[#0066cc]/10 border-[#0066cc] text-[#0066cc] ring-1 ring-[#0066cc]'
+                            : 'bg-[#fafafc] border-[#e5e5e7] text-[#525252] hover:bg-[#f5f5f7]'
+                        }`}
+                      >
+                        <span className="text-xs font-bold">{dur.label}</span>
+                        <span className="text-[10px] text-[#7a7a7a]">{dur.desc}</span>
+                        <span className="text-[11px] font-extrabold text-[#1d1d1f]">${calculatedFee}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-[#525252] font-semibold block">Select Date</label>
@@ -647,8 +680,8 @@ export default function Tutors() {
 
               <div className="p-4 rounded-2xl bg-[#f5f5f7] border border-[#e5e5e7] space-y-1.5 text-xs text-[#525252]">
                 <div className="flex justify-between font-medium">
-                  <span>1 Hour Live Session</span>
-                  <span>${selectedTutorForBooking.hourlyRate}.00</span>
+                  <span>{selectedDuration} Min Live Session</span>
+                  <span>${Math.round((selectedTutorForBooking.hourlyRate * selectedDuration) / 60)}.00</span>
                 </div>
                 <div className="flex justify-between font-medium">
                   <span>Platform Escrow Fee</span>
@@ -656,7 +689,7 @@ export default function Tutors() {
                 </div>
                 <div className="pt-2 border-t border-[#e0e0e0] flex justify-between font-bold text-[#1d1d1f] text-sm">
                   <span>Total</span>
-                  <span>${selectedTutorForBooking.hourlyRate}.00</span>
+                  <span>${Math.round((selectedTutorForBooking.hourlyRate * selectedDuration) / 60)}.00</span>
                 </div>
               </div>
 
