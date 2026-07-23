@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Link, useNavigate } from 'react-router-dom'
-import { User, Mail, CheckCircle2, AlertCircle, GraduationCap, UserCheck, Repeat } from 'lucide-react'
+import { User, Mail, CheckCircle2, AlertCircle, GraduationCap, UserCheck, Repeat, Check, X } from 'lucide-react'
 import { toast } from 'sonner'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 import AuthLayout from '../components/AuthLayout'
 import AuthCard from '../components/AuthCard'
@@ -42,6 +42,8 @@ export default function Signup() {
   const navigate = useNavigate()
   const { setAuth } = useAuthStore()
   const [isLoading, setIsLoading] = useState(false)
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false)
+  const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false)
 
   const {
     register,
@@ -64,8 +66,7 @@ export default function Signup() {
   const passwordValue = watch('password', '')
   const confirmPasswordValue = watch('confirmPassword', '')
 
-  const showMatchStatus = passwordValue.length > 0 && confirmPasswordValue.length > 0
-  const isMatching = passwordValue === confirmPasswordValue
+  const isMatching = passwordValue.length > 0 && passwordValue === confirmPasswordValue
 
   const onSubmit = async (data: SignupFields) => {
     setIsLoading(true)
@@ -95,7 +96,7 @@ export default function Signup() {
         bio: 'Member on SOCRATES peer learning platform.',
         subjects: ['Computer Science', 'Algorithms'],
         hourlyRate: data.role === 'student' ? 0 : 45,
-        isVerified: data.role === 'student', // Students are auto-verified; tutors require credential review
+        isVerified: data.role === 'student',
       }
       setAuth(newUser, 'demo_jwt_token_signup_123')
       toast.success(`Account created! Welcome, ${newUser.name}.`)
@@ -104,6 +105,9 @@ export default function Signup() {
       setIsLoading(false)
     }
   }
+
+  const { ref: passwordRef, ...passwordRegister } = register('password')
+  const { ref: confirmPasswordRef, ...confirmPasswordRegister } = register('confirmPassword')
 
   return (
     <AuthLayout>
@@ -183,45 +187,102 @@ export default function Signup() {
               </div>
             </div>
 
-            <PasswordInput
-              label="Password"
-              placeholder="Create password"
-              autoComplete="new-password"
-              error={errors.password?.message}
-              {...register('password')}
-            />
+            {/* Password Field */}
+            <div className="space-y-1.5">
+              <PasswordInput
+                label="Password"
+                placeholder="Create password"
+                autoComplete="new-password"
+                error={errors.password?.message}
+                ref={passwordRef}
+                {...passwordRegister}
+                onFocus={() => setIsPasswordFocused(true)}
+                onBlur={(e) => {
+                  passwordRegister.onBlur(e)
+                  setIsPasswordFocused(false)
+                }}
+              />
 
-            {/* Live password requirements panel */}
-            <PasswordStrength value={passwordValue} />
+              {/* Password Requirements Panel - opens strictly when Password field is focused or active */}
+              <AnimatePresence>
+                {(isPasswordFocused || (passwordValue.length > 0 && isPasswordFocused)) && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden pt-1"
+                  >
+                    <PasswordStrength value={passwordValue} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
+            {/* Confirm Password Field */}
             <div className="space-y-1.5">
               <PasswordInput
                 label="Confirm Password"
                 placeholder="Confirm password"
                 autoComplete="new-password"
                 error={errors.confirmPassword?.message}
-                {...register('confirmPassword')}
+                ref={confirmPasswordRef}
+                {...confirmPasswordRegister}
+                onFocus={() => setIsConfirmPasswordFocused(true)}
+                onBlur={(e) => {
+                  confirmPasswordRegister.onBlur(e)
+                  setIsConfirmPasswordFocused(false)
+                }}
               />
 
-              {/* Live pass match feedback */}
-              {showMatchStatus && (
-                <div
-                  className={`flex items-center gap-1.5 text-xs font-semibold select-none justify-end pt-1 ${isMatching ? 'text-[#16a34a]' : 'text-[#dc2626]'
-                    }`}
-                >
-                  {isMatching ? (
-                    <>
-                      <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-                      <span>Passwords match</span>
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                      <span>Passwords do not match</span>
-                    </>
-                  )}
-                </div>
-              )}
+              {/* Confirm Password Requirements Panel - opens strictly when Confirm Password field is focused or active */}
+              <AnimatePresence>
+                {(isConfirmPasswordFocused || confirmPasswordValue.length > 0) && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden pt-1"
+                  >
+                    <div className="w-full bg-[#f5f5f7] border border-[#e5e5e5] rounded-2xl p-4 space-y-2 text-left select-none">
+                      <p className="text-[12px] font-semibold text-[#1d1d1f]">
+                        Confirm Password Requirements
+                      </p>
+                      <div className="space-y-1.5 text-xs">
+                        <div
+                          className={`flex items-center gap-2 font-medium transition-colors ${
+                            confirmPasswordValue.length > 0
+                              ? isMatching
+                                ? 'text-emerald-600'
+                                : 'text-red-600'
+                              : 'text-[#6e6e73]'
+                          }`}
+                        >
+                          <div className="w-4 h-4 flex items-center justify-center shrink-0">
+                            {confirmPasswordValue.length > 0 ? (
+                              isMatching ? (
+                                <Check className="w-3.5 h-3.5 text-emerald-600 stroke-[3px]" />
+                              ) : (
+                                <X className="w-3.5 h-3.5 text-red-600 stroke-[3px]" />
+                              )
+                            ) : (
+                              <div className="w-3.5 h-3.5 rounded-full border border-[#6e6e73]/30" />
+                            )}
+                          </div>
+                          <span>
+                            {confirmPasswordValue.length === 0
+                              ? 'Must match password exactly'
+                              : isMatching
+                              ? 'Passwords match perfectly'
+                              : 'Passwords do not match yet'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <motion.button
