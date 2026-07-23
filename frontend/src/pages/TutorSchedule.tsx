@@ -555,7 +555,7 @@ export default function TutorSchedule() {
                           </div>
                         ))}
                         {day.status !== 'red' && !day.isPast && (
-                          <p className="text-[10px] text-[#0066cc] pt-1 font-semibold text-center">Click date cell to select slot</p>
+                          <p className="text-[10px] text-[#7a7a7a] pt-1 font-medium text-center">Click date cell to select slot</p>
                         )}
                       </div>
 
