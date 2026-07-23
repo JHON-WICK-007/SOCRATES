@@ -24,8 +24,24 @@ function TutorScheduleSkeleton() {
       {/* Top Header & Legend Skeleton */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="w-36 h-4 bg-[#e5e5e7] rounded-md" />
-        <div className="w-64 h-9 bg-white border border-[#e5e5e7] rounded-2xl p-2 flex items-center gap-2">
-          <div className="w-full h-4 bg-[#e5e5e7] rounded-md" />
+        <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-2xl border border-[#e5e5e7]">
+          <div className="w-20 h-3 bg-[#e5e5e7] rounded-sm" />
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#e5e5e7]" />
+            <div className="w-8 h-3 bg-[#e5e5e7] rounded-sm" />
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#e5e5e7]" />
+            <div className="w-12 h-3 bg-[#e5e5e7] rounded-sm" />
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#e5e5e7]" />
+            <div className="w-10 h-3 bg-[#e5e5e7] rounded-sm" />
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#e5e5e7]" />
+            <div className="w-11 h-3 bg-[#e5e5e7] rounded-sm" />
+          </div>
         </div>
       </div>
 
