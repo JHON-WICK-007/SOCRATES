@@ -3,6 +3,7 @@
 This file defines project-specific rules, style guidelines, and behavioral constraints for the agent.
 
 ## Core Workspace File Paths
+- **Master System Prompt**: [MASTER_SYSTEM_PROMPT.md](file:///d:/SOCRATES/MASTER_SYSTEM_PROMPT.md)
 - **Documentation Directory**: [docs/](file:///d:/SOCRATES/docs)
 - **Agent Config Backup in Docs**: [docs/.agents/AGENTS.md](file:///d:/SOCRATES/docs/.agents/AGENTS.md)
 - **Strict CSS Performance Rules**: [strict css.txt](file:///d:/SOCRATES/Usefull%20Tools/strict%20css.txt)
