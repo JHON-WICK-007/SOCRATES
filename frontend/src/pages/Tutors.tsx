@@ -382,7 +382,7 @@ export default function Tutors() {
                   options={subjectDropdownOptions}
                   value={selectedSubject}
                   onChange={(val: string) => setSelectedSubject(val)}
-                  buttonClassName="py-1.5 w-[210px] sm:w-[220px] justify-between"
+                  buttonClassName="py-1.5"
                   align="center"
                 />
 
