@@ -454,97 +454,95 @@ export default function Tutors() {
                 <motion.div
                   key={tutor.id}
                   variants={cardVariants}
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.2 }}
-                  className="bg-white rounded-3xl border border-[#e5e5e7] p-6 space-y-5 flex flex-col justify-between shadow-xs hover:shadow-md hover:border-[#0066cc]/40 transition-all group"
+                  className="bg-white rounded-3xl border border-[#e5e5e7] p-6 space-y-5 flex flex-col justify-between shadow-xs hover:border-[#0066cc]/40 hover:shadow-sm transition-all duration-200 group"
                 >
-                <div className="space-y-4">
-                  {/* Top Card Header */}
-                  <div className="flex items-start gap-4">
-                    <div className="relative">
-                      <img
-                        src={tutor.image}
-                        alt={tutor.name}
-                        className="w-16 h-16 rounded-2xl object-cover border border-[#e0e0e0] shadow-xs group-hover:scale-105 transition-transform"
-                      />
-                      {tutor.isOnline && (
-                        <span
-                          className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"
-                          title="Online & Ready for Live Session"
+                  <div className="space-y-4">
+                    {/* Top Card Header */}
+                    <div className="flex items-start gap-4">
+                      <div className="relative shrink-0">
+                        <img
+                          src={tutor.image}
+                          alt={tutor.name}
+                          className="w-16 h-16 rounded-2xl object-cover border border-[#e5e5e7] shadow-2xs"
                         />
-                      )}
-                    </div>
+                        {tutor.isOnline && (
+                          <span
+                            className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-white rounded-full"
+                            title="Online & Ready for Live Session"
+                          />
+                        )}
+                      </div>
 
-                    <div className="space-y-1 flex-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <h3 className="text-base font-display font-bold text-[#1d1d1f] group-hover:text-[#0066cc] transition-colors truncate">
-                          {tutor.name}
-                        </h3>
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          {tutor.aiMatchScore && tutor.aiMatchScore >= 75 && (
-                            <span className="px-2 py-0.5 rounded-full bg-[#0066cc]/10 text-[#0066cc] text-[10px] font-bold flex items-center gap-1 border border-[#0066cc]/20">
-                              <Sparkles size={10} />
-                              <span>{tutor.aiMatchScore}% Match</span>
-                            </span>
-                          )}
-                          {tutor.isVerified && (
-                            <span title="Verified Educator" className="inline-flex items-center">
-                              <ShieldCheck size={16} className="text-[#0066cc]" />
-                            </span>
-                          )}
+                      <div className="space-y-1 flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <h3 className="text-base font-bold text-[#1d1d1f] group-hover:text-[#0066cc] transition-colors truncate">
+                            {tutor.name}
+                          </h3>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {tutor.aiMatchScore && tutor.aiMatchScore >= 75 && (
+                              <span className="px-2 py-0.5 rounded-full bg-[#0066cc]/10 text-[#0066cc] text-[10px] font-bold flex items-center gap-1 border border-[#0066cc]/20">
+                                <Sparkles size={10} />
+                                <span>{tutor.aiMatchScore}% Match</span>
+                              </span>
+                            )}
+                            {tutor.isVerified && (
+                              <span title="Verified Educator" className="inline-flex items-center">
+                                <ShieldCheck size={16} className="text-[#0066cc]" />
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="text-xs text-[#7a7a7a] font-medium truncate">{tutor.experience}</div>
+
+                        <div className="flex items-center gap-1.5 text-xs pt-0.5">
+                          <Star size={13} className="text-amber-500 fill-amber-500" />
+                          <span className="font-semibold text-[#1d1d1f]">{tutor.rating}</span>
+                          <span className="text-[#7a7a7a] font-normal">({tutor.reviews} reviews)</span>
                         </div>
                       </div>
+                    </div>
 
-                      <div className="text-xs text-[#7a7a7a] font-medium">{tutor.experience}</div>
+                    {/* Primary Domain Tag */}
+                    <div className="p-3 rounded-xl bg-[#0066cc]/5 border border-[#0066cc]/15 text-xs font-semibold text-[#0066cc] flex items-center gap-2">
+                      <BookOpen size={14} className="text-[#0066cc]" />
+                      <span className="truncate">{tutor.subject}</span>
+                    </div>
 
-                      <div className="flex items-center gap-1 text-xs text-amber-600 font-semibold">
-                        <Star size={13} className="text-amber-500 stroke-[2.2]" />
-                        <span>{tutor.rating}</span>
-                        <span className="text-[#7a7a7a] font-normal">({tutor.reviews})</span>
-                      </div>
+                    {/* Bio Statement */}
+                    <p className="text-xs text-[#525252] leading-relaxed line-clamp-3 font-normal">
+                      {tutor.bio}
+                    </p>
+
+                    {/* Subject Badges */}
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {tutor.subjects.map((sub, idx) => (
+                        <span
+                          key={idx}
+                          className="px-2.5 py-1 rounded-lg bg-[#f5f5f7] border border-[#e5e5e7] text-[11px] font-medium text-[#525252]"
+                        >
+                          {sub}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
-                  {/* Primary Domain */}
-                  <div className="p-3 rounded-xl bg-[#f5f5f7] border border-[#e5e5e7] text-xs font-semibold text-[#1d1d1f] flex items-center gap-2">
-                    <BookOpen size={14} className="text-[#0066cc]" />
-                    <span>{tutor.subject}</span>
+                  {/* Bottom Action Footer */}
+                  <div className="pt-4 border-t border-[#f0f0f2] flex items-center justify-between gap-3 mt-4">
+                    <div>
+                      <span className="text-lg font-bold text-[#1d1d1f]">${tutor.hourlyRate}</span>
+                      <span className="text-xs text-[#7a7a7a]">/hr</span>
+                    </div>
+
+                    <button
+                      onClick={() => navigate(`/tutors/${tutor.id}/schedule`)}
+                      className="px-4 py-2.5 rounded-xl bg-[#0066cc] hover:bg-[#0077ed] text-white text-xs font-semibold transition-colors shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-98 select-none"
+                    >
+                      <Calendar size={13} />
+                      Check Availability
+                    </button>
                   </div>
-
-                  {/* Bio Statement */}
-                  <p className="text-xs text-[#525252] leading-relaxed line-clamp-3 font-normal">
-                    {tutor.bio}
-                  </p>
-
-                  {/* Subject Badges */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {tutor.subjects.map((sub, idx) => (
-                      <span
-                        key={idx}
-                        className="px-2.5 py-1 rounded-lg bg-[#f5f5f7] border border-[#e0e0e0] text-[11px] font-medium text-[#525252]"
-                      >
-                        {sub}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Bottom Action Footer */}
-                <div className="pt-4 border-t border-[#f0f0f2] flex items-center justify-between gap-3 mt-4">
-                  <div>
-                    <span className="text-lg font-display font-bold text-[#1d1d1f]">${tutor.hourlyRate}</span>
-                    <span className="text-xs text-[#7a7a7a]">/hr</span>
-                  </div>
-
-                  <button
-                    onClick={() => navigate(`/tutors/${tutor.id}/schedule`)}
-                    className="px-4 py-2 rounded-xl bg-[#0066cc] hover:bg-[#0077ed] text-white text-xs font-semibold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95"
-                  >
-                    <Calendar size={13} />
-                    Check Availability
-                  </button>
-                </div>
-              </motion.div>
+                </motion.div>
             ))}
           </div>
         )}
