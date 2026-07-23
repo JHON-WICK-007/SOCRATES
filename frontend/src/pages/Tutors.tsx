@@ -281,16 +281,16 @@ export default function Tutors() {
   }
 
   const ratingOptions: DropdownOption<number>[] = [
-    { value: 0, label: 'Any Rating', icon: <Star size={13} className="text-[#86868b]" /> },
-    { value: 4.5, label: '4.5+ Rating', icon: <Star size={13} className="text-amber-500" /> },
-    { value: 4.8, label: '4.8+ Rating', icon: <Star size={13} className="text-amber-500" /> },
-    { value: 4.9, label: '4.9+ Rating', icon: <Star size={13} className="text-amber-500" /> },
+    { value: 0, label: 'Any Rating', icon: <Star size={13} className="text-[#0066cc]" /> },
+    { value: 4.5, label: '4.5+ Rating', icon: <Star size={13} className="text-[#0066cc]" /> },
+    { value: 4.8, label: '4.8+ Rating', icon: <Star size={13} className="text-[#0066cc]" /> },
+    { value: 4.9, label: '4.9+ Rating', icon: <Star size={13} className="text-[#0066cc]" /> },
   ]
 
   const priceOptions: DropdownOption<number>[] = [
-    { value: 100, label: 'Under $100/hr', icon: <DollarSign size={13} className="text-[#86868b]" /> },
-    { value: 70, label: 'Under $70/hr', icon: <DollarSign size={13} className="text-[#86868b]" /> },
-    { value: 55, label: 'Under $55/hr', icon: <DollarSign size={13} className="text-[#86868b]" /> },
+    { value: 100, label: 'Under $100/hr', icon: <DollarSign size={13} className="text-[#0066cc]" /> },
+    { value: 70, label: 'Under $70/hr', icon: <DollarSign size={13} className="text-[#0066cc]" /> },
+    { value: 55, label: 'Under $55/hr', icon: <DollarSign size={13} className="text-[#0066cc]" /> },
   ]
 
   const subjectDropdownOptions: DropdownOption<string>[] = useMemo(() => {
