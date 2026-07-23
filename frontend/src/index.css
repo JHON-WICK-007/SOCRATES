@@ -26,10 +26,10 @@ body {
   min-height: 100vh;
 }
 
-/* Sonner Toast Close Button Top-Right Position */
+/* Sonner Toast Close Button Vertically Centered Right */
 [data-sonner-toast] [data-close-button] {
-  top: 8px !important;
-  right: 8px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  right: 12px !important;
   left: auto !important;
-  transform: none !important;
 }
