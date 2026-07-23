@@ -419,47 +419,48 @@ export default function TutorSchedule() {
 
                   {/* HOVER TOOLTIP */}
                   {hoveredDay?.date === day.date && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 w-64 p-3.5 bg-[#1d1d1f] text-white text-xs rounded-2xl shadow-xl z-50 pointer-events-none space-y-2 border border-white/10 animate-in fade-in zoom-in duration-150">
-                      <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                        <span className="font-semibold text-white">{day.fullDateStr}</span>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                          day.status === 'green' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' :
-                          day.status === 'yellow' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' :
-                          'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 w-56 p-3 bg-white text-[#1d1d1f] text-xs rounded-2xl shadow-xl z-50 pointer-events-none space-y-2 border border-[#e5e5e7] animate-in fade-in zoom-in-95 duration-150">
+                      <div className="flex items-center justify-between border-b border-[#f0f0f2] pb-2">
+                        <span className="font-semibold text-[#1d1d1f] text-xs">{day.fullDateStr}</span>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                          day.status === 'green' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
+                          day.status === 'yellow' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                          'bg-rose-50 text-rose-600 border-rose-200'
                         }`}>
-                          {day.label}
+                          {day.status === 'green' ? 'Available' : day.status === 'yellow' ? 'Limited' : 'Booked'}
                         </span>
                       </div>
 
                       {day.status !== 'red' ? (
-                        <div className="space-y-1.5 pt-1">
-                          <p className="text-[11px] text-[#a1a1a6] font-medium">Available Time Slots & Topics:</p>
+                        <div className="space-y-1.5 pt-0.5">
+                          <p className="text-[10px] text-[#7a7a7a] font-medium uppercase tracking-wider">Open Slots & Taught Topics:</p>
                           {day.slots.map((slot, sIdx) => (
                             <div 
                               key={sIdx} 
-                              className={`flex items-center justify-between p-1.5 rounded-lg text-[11px] ${
-                                slot.isBooked ? 'opacity-40 line-through' : 'bg-white/5 text-white'
+                              className={`flex items-center justify-between p-1.5 rounded-xl border text-[11px] ${
+                                slot.isBooked ? 'bg-[#f5f5f7] border-[#e5e5e7] opacity-50 line-through text-[#7a7a7a]' : 'bg-[#fafafc] border-[#e8e8ed] text-[#1d1d1f]'
                               }`}
                             >
-                              <span className="flex items-center gap-1 font-mono">
-                                <Clock size={11} className="text-[#0066cc]" />
+                              <span className="flex items-center gap-1 font-mono font-medium text-[10px]">
+                                <Clock size={10} className="text-[#0066cc]" />
                                 {slot.time}
                               </span>
-                              <span className="truncate max-w-[110px] text-[10px] text-emerald-400 font-medium">
+                              <span className="truncate max-w-[100px] text-[10px] text-[#0066cc] bg-[#0066cc]/8 px-1.5 py-0.5 rounded-md font-medium">
                                 {slot.subject.split(' ')[0]}
                               </span>
                             </div>
                           ))}
-                          <p className="text-[10px] text-[#0066cc] pt-1 font-semibold text-center">Click date to select slot</p>
+                          <p className="text-[10px] text-[#0066cc] pt-1 font-semibold text-center">Click date to book slot</p>
                         </div>
                       ) : (
-                        <p className="text-[11px] text-rose-300 pt-1 text-center font-medium">
+                        <p className="text-[11px] text-rose-600 pt-1 text-center font-medium">
                           No open slots available on this date.
                         </p>
                       )}
 
                       {/* Tooltip Pointer Arrow */}
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-[#1d1d1f]" />
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-4 border-transparent border-t-[#e5e5e7]" />
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[2px] border-4 border-transparent border-t-white" />
                     </div>
                   )}
                 </div>
