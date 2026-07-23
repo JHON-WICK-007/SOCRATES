@@ -189,25 +189,6 @@ export default function Hero() {
             </div>
           </motion.div>
         </motion.div>
-
-        {/* Scroll Indicator */}
-        <motion.div 
-          variants={itemVariants}
-          className="mt-12 sm:mt-16 flex flex-col items-center gap-1 text-[#7a7a7a]"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            aria-label="Scroll down"
-            className="p-1 cursor-pointer"
-          >
-            <ChevronDown className="w-5 h-5 text-[#7a7a7a]" />
-          </motion.div>
-        </motion.div>
       </motion.div>
     </section>
   )
