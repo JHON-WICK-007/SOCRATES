@@ -557,10 +557,11 @@ export default function TutorSchedule() {
         {selectedDay && (
           <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-lg bg-white border border-[#e0e0e0] rounded-3xl p-6 space-y-6 shadow-2xl relative text-[#1d1d1f]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="w-full max-w-lg bg-white border border-[#e0e0e0] rounded-3xl p-6 space-y-6 shadow-2xl relative text-[#1d1d1f] transform-gpu select-none"
             >
               {/* Header */}
               <div className="flex items-start justify-between border-b border-[#e5e5e7] pb-4">

@@ -583,7 +583,7 @@ export default function Tutors() {
       {/* BOOKING MODAL */}
       {selectedTutorForBooking && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="w-full max-w-lg bg-white border border-[#e0e0e0] rounded-3xl p-6 space-y-6 relative shadow-2xl animate-in fade-in zoom-in duration-200 text-[#1d1d1f]">
+          <div className="w-full max-w-lg bg-white border border-[#e0e0e0] rounded-3xl p-6 space-y-6 relative shadow-2xl animate-in fade-in duration-150 text-[#1d1d1f] transform-gpu select-none">
             <div className="flex items-center justify-between border-b border-[#e5e5e7] pb-3">
               <div className="flex items-center gap-3">
                 <img
