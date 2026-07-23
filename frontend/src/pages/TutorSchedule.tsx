@@ -64,8 +64,12 @@ function TutorScheduleSkeleton() {
 
       {/* Calendar Grid Skeleton */}
       <div className="bg-white rounded-3xl border border-[#e5e5e7] p-6 sm:p-8 space-y-6">
-        <div className="flex justify-between items-center pb-6 border-b border-[#f0f0f2]">
-          <div className="w-48 h-7 bg-[#e5e5e7] rounded-lg" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-[#f0f0f2] gap-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="w-5 h-5 bg-[#e5e5e7] rounded-md shrink-0" />
+            <div className="w-44 h-6 bg-[#e5e5e7] rounded-lg" />
+            <div className="w-28 h-6 bg-[#e5e5e7] rounded-full border border-[#e5e5e7] shrink-0" />
+          </div>
           <div className="flex gap-2">
             <div className="w-8 h-8 bg-[#e5e5e7] rounded-xl" />
             <div className="w-8 h-8 bg-[#e5e5e7] rounded-xl" />
