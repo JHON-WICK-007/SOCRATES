@@ -40,7 +40,13 @@ This file defines project-specific rules, style guidelines, and behavioral const
 - **Security & Validation**: `helmet`, `express-rate-limit`, `cors`, `joi` / `express-validator`, `bcrypt`, `jsonwebtoken`.
 - **File Uploads**: `multer`, `cloudinary`, `sharp`.
 
+## Local AI First & API Cost Optimization Rules (MANDATORY)
+- **Local-First AI Execution**: Always prioritize running AI tasks locally (e.g., local Ollama, Hugging Face models, local embeddings via `sentence-transformers`, scikit-learn ML models).
+- **Minimize Cloud LLM API Usage**: Minimize external LLM API key calls (Gemini/OpenAI/Claude). Only use cloud APIs as an explicit fallback when local models are unavailable or if high-capacity cloud processing is explicitly requested.
+- **No Unnecessary API Calls**: Never invoke external LLM APIs inside automatic polling loops, test scripts, or bulk pre-indexing. Cache LLM results locally whenever possible.
+
 ## Development Commands
 - Frontend dev server: `cd frontend && npm run dev`
 - Backend dev server: `cd backend && npm run dev`
 - Database seed: `cd backend && npm run seed`
+
