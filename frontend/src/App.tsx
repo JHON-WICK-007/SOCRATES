@@ -1,5 +1,5 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -11,9 +11,27 @@ import Profile from './pages/Profile'
 import Tutors from './pages/Tutors'
 import './App.css'
 
+function ScrollToTop() {
+  const { pathname, hash } = useLocation()
+
+  useEffect(() => {
+    if (!hash) {
+      window.scrollTo(0, 0)
+    } else {
+      const element = document.getElementById(hash.replace('#', ''))
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }, [pathname, hash])
+
+  return null
+}
+
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Toaster position="top-right" richColors duration={1800} closeButton />
       <Routes>
         <Route path="/" element={<Home />} />

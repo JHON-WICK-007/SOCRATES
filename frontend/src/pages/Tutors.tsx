@@ -141,6 +141,7 @@ export default function Tutors() {
   const [isBookingSubmitting, setIsBookingSubmitting] = useState(false)
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     async function loadBackendTutors() {
       const data = await fetchFeaturedTutors()
       if (data && data.length > 0) {
