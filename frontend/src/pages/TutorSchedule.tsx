@@ -11,6 +11,8 @@ import {
   Star, 
   Video, 
   BookOpen, 
+  Lock,
+  User,
   Info,
   Sparkles
 } from 'lucide-react'
@@ -473,12 +475,14 @@ export default function TutorSchedule() {
                             </div>
 
                             {slot.isBooked ? (
-                              <div className="text-[10px] text-rose-700 font-medium truncate pt-0.5">
-                                🔒 Booked by <span className="font-semibold text-rose-900">{slot.bookedBy}</span>
+                              <div className="flex items-center gap-1.5 text-[10px] text-rose-800 font-medium truncate pt-0.5">
+                                <Lock size={10} className="text-rose-500 shrink-0" />
+                                <span className="truncate">Booked by <strong className="font-semibold text-rose-950">{slot.bookedBy}</strong></span>
                               </div>
                             ) : (
-                              <div className="text-[10px] text-[#0066cc] font-medium truncate pt-0.5">
-                                📚 Subject: <span className="font-semibold">{slot.subject}</span>
+                              <div className="flex items-center gap-1.5 text-[10px] text-[#0066cc] font-medium truncate pt-0.5">
+                                <BookOpen size={10} className="text-[#0066cc] shrink-0" />
+                                <span className="truncate">Subject: <strong className="font-semibold">{slot.subject}</strong></span>
                               </div>
                             )}
                           </div>
