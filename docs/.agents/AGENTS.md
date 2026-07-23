@@ -40,10 +40,11 @@ This file defines project-specific rules, style guidelines, and behavioral const
 - **Security & Validation**: `helmet`, `express-rate-limit`, `cors`, `joi` / `express-validator`, `bcrypt`, `jsonwebtoken`.
 - **File Uploads**: `multer`, `cloudinary`, `sharp`.
 
-## Local AI First & API Cost Optimization Rules (MANDATORY)
-- **Local-First AI Execution**: Always prioritize running AI tasks locally (e.g., local Ollama, Hugging Face models, local embeddings via `sentence-transformers`, scikit-learn ML models).
-- **Minimize Cloud LLM API Usage**: Minimize external LLM API key calls (Gemini/OpenAI/Claude). Only use cloud APIs as an explicit fallback when local models are unavailable or if high-capacity cloud processing is explicitly requested.
-- **No Unnecessary API Calls**: Never invoke external LLM APIs inside automatic polling loops, test scripts, or bulk pre-indexing. Cache LLM results locally whenever possible.
+## Local ML First & Selective API Usage Rules (MANDATORY)
+- **Build Local ML Models First**: Always design, build, and use custom local Machine Learning / NLP models (e.g., using scikit-learn, PyTorch, Hugging Face transformers, local sentence embeddings, or local Ollama) for tasks like tutor matching, recommendations, similarity scoring, classification, and content analysis.
+- **Selective API Key Usage**: Use external LLM API keys (e.g., Gemini / OpenAI) ONLY for specific tasks where a local ML model is insufficient or impossible (e.g., complex open-ended multi-step conversational tutoring).
+- **Strict API Efficiency**: Never invoke external LLM APIs for tasks that a custom local ML algorithm can handle (e.g., recommendation scoring, search indexing, data filtering).
+
 
 ## Development Commands
 - Frontend dev server: `cd frontend && npm run dev`

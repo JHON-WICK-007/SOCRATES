@@ -32,7 +32,7 @@ npm run seed     # Seed database
   - You MUST strictly follow the anti-jank and performance rules in [strict css.txt](file:///d:/SOCRATES/Usefull%20Tools/strict%20css.txt).
   - Never use raw emojis as UI icons; use `lucide-react` or `react-icons`.
   - Maintain dark/light mode polished Apple-inspired aesthetic ([docs/DESIGN-apple.md](file:///d:/SOCRATES/docs/DESIGN-apple.md)).
-  - Prioritize local AI execution (Ollama, Hugging Face, scikit-learn) to minimize cloud LLM API key usage and costs.
+  - Build local ML models (scikit-learn, PyTorch, HuggingFace, local embeddings) for recommendations, matching & classification. Only use cloud API keys for tasks requiring large open-ended generative LLMs.
 - **API Guidelines**:
   - Express routes mapped under `/api/v1/`.
   - Controllers return `{ success: true, data: ... }` or pass errors to `express-async-errors`.
