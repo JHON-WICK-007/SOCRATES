@@ -106,3 +106,25 @@ export const updateUserProfileApi = async (data: {
     return { success: false, message: 'Failed to update profile' }
   }
 }
+
+// AI Microservice Recommendation Endpoint (FastAPI @ Port 8000)
+const AI_SERVICE_URL = 'http://localhost:8000/api/v1/ai'
+
+export interface AiRecommendRequest {
+  query?: string
+  subject?: string
+  max_budget?: number
+  candidates?: any[]
+}
+
+export const fetchAiTutorRecommendations = async (req: AiRecommendRequest) => {
+  try {
+    const response = await axios.post(`${AI_SERVICE_URL}/recommend/tutors`, req, {
+      timeout: 4000,
+    })
+    return response.data
+  } catch (error) {
+    console.warn('[AI Microservice] Microservice offline. Operating local ML model fallback.')
+    return null
+  }
+}

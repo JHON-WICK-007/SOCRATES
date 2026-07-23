@@ -1,31 +1,18 @@
-# SOCRATES AI Microservice (FastAPI)
+---
+title: SOCRATES AI Microservice
+emoji: 🧠
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
 
-## Overview
-This directory contains the Python FastAPI microservice that handles AI/ML workloads for SOCRATES, including AI Tutoring, Smart Tutor Matchmaking, RAG Vector Search, and Session Summarization.
+# SOCRATES AI Microservice
 
-## Quick Start Commands
+High-performance Python Machine Learning & NLP microservice for tutor matching, vector similarity recommendations, and session summarization.
 
-```bash
-# Navigate to ai-service directory
-cd ai-service
-
-# Create Python virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# On Windows PowerShell:
-.\venv\Scripts\Activate.ps1
-# On Linux/macOS:
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Start Uvicorn development server
-uvicorn main:app --reload --port 8000
-```
-
-## API Documentation
-- Interactive Swagger UI: `http://localhost:8000/docs`
-- ReDoc Documentation: `http://localhost:8000/redoc`
-- Health Check: `http://localhost:8000/health`
+## Features
+- **Scikit-Learn TF-IDF Vector Cosine Similarity**: Matches student learning queries with candidate tutor profiles.
+- **Multi-Attribute Utility Model (MAUT)**: Ranks tutors by text similarity, Bayesian rating confidence, budget affinity, and verification signals.
+- **FastAPI Endpoints**: OpenAPI documentation available at `/docs`.

@@ -66,18 +66,10 @@ export default function Hero() {
         animate="visible"
         className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center w-full"
       >
-        {/* Badge */}
-        <motion.div variants={itemVariants}>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#f5f5f7] border border-[#e0e0e0] text-xs font-medium text-[#1d1d1f] tracking-tight">
-            <Sparkles className="w-3.5 h-3.5 text-[#0066cc]" aria-hidden="true" />
-            <span>AI-Powered Learning Marketplace</span>
-          </div>
-        </motion.div>
-
         {/* Headline */}
         <motion.h1 
           variants={itemVariants} 
-          className="mt-7 mb-6 text-4xl sm:text-6xl md:text-7xl lg:text-[76px] font-semibold tracking-[-0.035em] leading-[1.08] text-[#1d1d1f]"
+          className="mt-4 mb-6 text-4xl sm:text-6xl md:text-7xl lg:text-[76px] font-semibold tracking-[-0.035em] leading-[1.08] text-[#1d1d1f]"
         >
           <span>Learn from the source.</span>
           <br className="hidden sm:inline" />

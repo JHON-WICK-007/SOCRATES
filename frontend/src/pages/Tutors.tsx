@@ -1,25 +1,21 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import {
+  BookOpen,
+  DollarSign,
+  Filter,
   Search,
-  Star,
   ShieldCheck,
   Sparkles,
-  DollarSign,
-  Clock,
-  BookOpen,
-  Filter,
-  CheckCircle2,
-  Calendar,
-  X,
+  Star,
   UserCheck,
   Video,
-  ArrowRight,
+  X
 } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import React, { useEffect, useMemo, useState } from 'react'
+import { toast } from 'sonner'
+import CustomDropdown, { DropdownOption } from '../components/CustomDropdown'
 import Navbar from '../components/Navbar'
 import { fetchFeaturedTutors, TutorItem } from '../services/api'
-import { toast } from 'sonner'
 
 export interface ExtendedTutor extends TutorItem {
   id: string
@@ -30,6 +26,7 @@ export interface ExtendedTutor extends TutorItem {
   isVerified: boolean
   institution: string
   totalStudents: number
+  aiMatchScore?: number
 }
 
 const INITIAL_TOP_TUTORS: ExtendedTutor[] = [
@@ -220,6 +217,27 @@ export default function Tutors() {
     }, 600)
   }
 
+  const ratingOptions: DropdownOption<number>[] = [
+    { value: 0, label: 'Any Rating', icon: <Star size={13} className="text-[#86868b]" /> },
+    { value: 4.5, label: '4.5+ Rating', icon: <Star size={13} className="text-amber-500" /> },
+    { value: 4.8, label: '4.8+ Rating', icon: <Star size={13} className="text-amber-500" /> },
+    { value: 4.9, label: '4.9+ Rating', icon: <Star size={13} className="text-amber-500" /> },
+  ]
+
+  const priceOptions: DropdownOption<number>[] = [
+    { value: 100, label: 'Under $100/hr', icon: <DollarSign size={13} className="text-[#86868b]" /> },
+    { value: 70, label: 'Under $70/hr', icon: <DollarSign size={13} className="text-[#86868b]" /> },
+    { value: 55, label: 'Under $55/hr', icon: <DollarSign size={13} className="text-[#86868b]" /> },
+  ]
+
+  const subjectDropdownOptions: DropdownOption<string>[] = useMemo(() => {
+    return allSubjects.map((sub) => ({
+      value: sub,
+      label: sub === 'All' ? 'All Academic Domains' : sub,
+      icon: <BookOpen size={13} className="text-[#0066cc]" />,
+    }))
+  }, [allSubjects])
+
   return (
     <div className="min-h-screen bg-[#fafafc] text-[#1d1d1f] font-sans selection:bg-[#0066cc]/10 selection:text-[#0066cc] pb-24">
       {/* Background Subtle Gradient */}
@@ -230,11 +248,6 @@ export default function Tutors() {
 
       {/* Hero Header Section */}
       <section className="relative z-10 max-w-6xl mx-auto px-6 pt-12 pb-8 text-center space-y-4">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#e0e0e0] text-xs font-semibold text-[#0066cc] shadow-xs">
-          <Sparkles size={14} />
-          <span>Vetted & Verified Scholars</span>
-        </div>
-
         <h1 className="text-4xl sm:text-5xl font-display font-bold tracking-tight text-[#1d1d1f]">
           Top Rated Tutors & Peer Mentors
         </h1>
@@ -269,54 +282,49 @@ export default function Tutors() {
 
           {/* Secondary Filters Grid */}
           <div className="flex flex-wrap items-center justify-between gap-4 text-xs pt-2 border-t border-[#f0f0f2]">
-            {/* Subject Chips */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
-              <span className="text-[#86868b] font-semibold shrink-0 mr-1 flex items-center gap-1">
-                <Filter size={12} /> Domain:
-              </span>
-              {allSubjects.slice(0, 7).map((sub) => (
-                <button
-                  key={sub}
-                  onClick={() => setSelectedSubject(sub)}
-                  className={`px-3 py-1.5 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
-                    selectedSubject === sub
-                      ? 'bg-[#0066cc] text-white shadow-xs'
-                      : 'bg-[#f5f5f7] border border-[#e5e5e7] text-[#525252] hover:bg-[#e0e0e0]/60'
-                  }`}
-                >
-                  {sub}
-                </button>
-              ))}
+            {/* Subject Dropdown & Quick Chips */}
+            <div className="flex flex-wrap items-center gap-2 max-w-full">
+              <CustomDropdown<string>
+                options={subjectDropdownOptions}
+                value={selectedSubject}
+                onChange={(val: string) => setSelectedSubject(val)}
+                icon={<Filter size={13} />}
+                buttonClassName="py-1.5"
+              />
+
+              <div className="hidden sm:flex items-center gap-1.5 overflow-x-auto">
+                {allSubjects.slice(1, 6).map((sub) => (
+                  <button
+                    key={sub}
+                    onClick={() => setSelectedSubject(sub)}
+                    className={`px-2.5 py-1 rounded-xl font-medium transition-all shrink-0 cursor-pointer ${
+                      selectedSubject === sub
+                        ? 'bg-[#0066cc] text-white shadow-xs'
+                        : 'bg-[#f5f5f7] border border-[#e5e5e7] text-[#525252] hover:bg-[#e0e0e0]/60'
+                    }`}
+                  >
+                    {sub}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Price & Rating Selectors */}
-            <div className="flex items-center gap-4 text-[#525252]">
-              <div className="flex items-center gap-1.5">
-                <label className="font-semibold text-[#86868b]">Min Rating:</label>
-                <select
-                  value={minRating}
-                  onChange={(e) => setMinRating(Number(e.target.value))}
-                  className="px-2.5 py-1.5 rounded-xl bg-[#f5f5f7] border border-[#e0e0e0] text-[#1d1d1f] font-semibold focus:outline-none"
-                >
-                  <option value={0}>Any Rating</option>
-                  <option value={4.5}>4.5+ ★</option>
-                  <option value={4.8}>4.8+ ★</option>
-                  <option value={4.9}>4.9+ ★</option>
-                </select>
-              </div>
+            <div className="flex items-center gap-3">
+              <CustomDropdown<number>
+                options={ratingOptions}
+                value={minRating}
+                onChange={(val: number) => setMinRating(val)}
+                buttonClassName="py-1.5"
+              />
 
-              <div className="flex items-center gap-1.5">
-                <label className="font-semibold text-[#86868b]">Max Rate:</label>
-                <select
-                  value={maxPrice}
-                  onChange={(e) => setMaxPrice(Number(e.target.value))}
-                  className="px-2.5 py-1.5 rounded-xl bg-[#f5f5f7] border border-[#e0e0e0] text-[#1d1d1f] font-semibold focus:outline-none"
-                >
-                  <option value={100}>Under $100/hr</option>
-                  <option value={70}>Under $70/hr</option>
-                  <option value={55}>Under $55/hr</option>
-                </select>
-              </div>
+              <CustomDropdown<number>
+                options={priceOptions}
+                value={maxPrice}
+                onChange={(val: number) => setMaxPrice(val)}
+                buttonClassName="py-1.5"
+                align="right"
+              />
             </div>
           </div>
         </div>
@@ -376,19 +384,29 @@ export default function Tutors() {
                     </div>
 
                     <div className="space-y-1 flex-1">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-base font-display font-bold text-[#1d1d1f] group-hover:text-[#0066cc] transition-colors">
+                      <div className="flex items-center justify-between gap-2">
+                        <h3 className="text-base font-display font-bold text-[#1d1d1f] group-hover:text-[#0066cc] transition-colors truncate">
                           {tutor.name}
                         </h3>
-                        {tutor.isVerified && (
-                          <ShieldCheck size={16} className="text-[#0066cc]" title="Verified Educator" />
-                        )}
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {tutor.aiMatchScore && tutor.aiMatchScore >= 75 && (
+                            <span className="px-2 py-0.5 rounded-full bg-[#0066cc]/10 text-[#0066cc] text-[10px] font-bold flex items-center gap-1 border border-[#0066cc]/20">
+                              <Sparkles size={10} />
+                              <span>{tutor.aiMatchScore}% Match</span>
+                            </span>
+                          )}
+                          {tutor.isVerified && (
+                            <span title="Verified Educator" className="inline-flex items-center">
+                              <ShieldCheck size={16} className="text-[#0066cc]" />
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       <div className="text-xs text-[#7a7a7a] font-medium">{tutor.experience}</div>
 
                       <div className="flex items-center gap-1 text-xs text-amber-600 font-semibold">
-                        <Star size={13} className="fill-amber-400 text-amber-400" />
+                        <Star size={13} className="text-amber-500 stroke-[2.2]" />
                         <span>{tutor.rating}</span>
                         <span className="text-[#7a7a7a] font-normal">({tutor.reviews})</span>
                       </div>

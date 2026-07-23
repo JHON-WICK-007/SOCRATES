@@ -23,6 +23,7 @@ import { useAuthStore, ProfilePerspective } from '../store/useAuthStore'
 import { updateUserProfileApi } from '../services/api'
 import { toast } from 'sonner'
 import Navbar from '../components/Navbar'
+import CustomDropdown, { DropdownOption } from '../components/CustomDropdown'
 
 export default function Profile() {
   const { user, updateUser, logout } = useAuthStore()
@@ -559,23 +560,20 @@ export default function Profile() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-[#525252] font-semibold block">
+                  <label className="text-[#525252] font-semibold block text-xs">
                     Account Role / Identity
                   </label>
-                  <select
+                  <CustomDropdown
+                    options={[
+                      { value: 'student', label: 'Student Only (Learning)', icon: <GraduationCap size={14} /> },
+                      { value: 'tutor', label: 'Tutor Only (Teaching)', icon: <UserCheck size={14} /> },
+                      { value: 'both', label: 'Peer-to-Peer (Both Learn & Teach)', icon: <Layers size={14} /> },
+                    ]}
                     value={formData.role}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        role: e.target.value as 'student' | 'tutor' | 'both',
-                      })
-                    }
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#f5f5f7] border border-[#e0e0e0] text-[#1d1d1f] font-medium focus:outline-none focus:border-[#0066cc]"
-                  >
-                    <option value="student">🎓 Student Only (Learning)</option>
-                    <option value="tutor">👨‍🏫 Tutor Only (Teaching)</option>
-                    <option value="both">🔀 Peer-to-Peer (Both Learn & Teach)</option>
-                  </select>
+                    onChange={(val) => setFormData({ ...formData, role: val })}
+                    className="w-full"
+                    buttonClassName="w-full py-2.5 px-4 bg-[#f5f5f7] border-[#e0e0e0]"
+                  />
                 </div>
               </div>
 

@@ -68,11 +68,6 @@ export default function StudyRooms() {
             transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-5 space-y-6"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f5f5f7] border border-[#e0e0e0] text-xs font-medium text-[#0066cc]">
-              <Users className="w-3.5 h-3.5" />
-              <span>Collaborative Learning</span>
-            </div>
-
             <h2 className="text-3xl sm:text-5xl font-semibold tracking-tight text-[#1d1d1f] leading-[1.08]">
               Peer Study Rooms.
             </h2>

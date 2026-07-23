@@ -27,13 +27,8 @@ export default function AITutor() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-3xl mx-auto mb-16 space-y-4"
+          className="max-w-3xl mx-auto mb-16 space-y-4 text-center"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#f5f5f7] border border-[#e0e0e0] text-xs font-medium text-[#0066cc]">
-            <Bot className="w-3.5 h-3.5" />
-            <span>Interactive Product Showcase</span>
-          </div>
-
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-[#1d1d1f]">
             The Socratic AI Experience.
           </h2>
