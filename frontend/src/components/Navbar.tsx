@@ -1,8 +1,20 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Logo from './Logo'
+import { useAuthStore } from '../store/useAuthStore'
+import { User, LogOut, LayoutDashboard } from 'lucide-react'
+import { toast } from 'sonner'
 
 export default function Navbar() {
+  const { user, logout } = useAuthStore()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    logout()
+    toast.success('Signed out successfully')
+    navigate('/')
+  }
+
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#e0e0e0]/60 transition-all select-none">
       <nav 
@@ -21,22 +33,57 @@ export default function Navbar() {
           <a href="#pricing" className="hover:text-[#1d1d1f] transition-colors focus-visible:outline-2 focus-visible:outline-[#0066cc]">Pricing</a>
         </div>
 
-        <div className="flex items-center gap-5">
-          <Link 
-            to="/login" 
-            className="hover:text-[#0066cc] transition-colors font-medium focus-visible:outline-2 focus-visible:outline-[#0066cc] rounded"
-          >
-            Sign In
-          </Link>
-          <Link 
-            to="/login" 
-            className="px-3 py-1 rounded-full bg-[#0066cc] text-white font-medium hover:bg-[#0077ed] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0066cc]"
-          >
-            Get Started
-          </Link>
+        <div className="flex items-center gap-4">
+          {user ? (
+            <div className="flex items-center gap-3">
+              <Link
+                to="/profile"
+                className="flex items-center gap-2.5 px-3 py-1 rounded-full bg-[#f5f5f7] border border-[#e0e0e0] text-[#1d1d1f] hover:bg-[#e0e0e0]/50 transition-all group"
+              >
+                <img
+                  src={user.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80'}
+                  alt={user.name}
+                  className="w-6 h-6 rounded-full object-cover border border-[#0066cc]/40"
+                />
+                <span className="font-semibold text-xs text-[#1d1d1f] group-hover:text-[#0066cc] transition-colors max-w-[100px] truncate">
+                  {user.name}
+                </span>
+              </Link>
+
+              <Link
+                to="/profile"
+                className="px-3.5 py-1.5 rounded-full bg-[#0066cc] text-white font-medium hover:bg-[#0077ed] transition-colors flex items-center gap-1.5 shadow-sm"
+              >
+                <User size={13} />
+                Profile
+              </Link>
+
+              <button
+                onClick={handleLogout}
+                className="p-1.5 rounded-full text-[#6e6e73] hover:text-[#dc2626] hover:bg-[#dc2626]/10 transition-colors"
+                title="Sign Out"
+              >
+                <LogOut size={16} />
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <Link 
+                to="/login" 
+                className="hover:text-[#0066cc] transition-colors font-medium focus-visible:outline-2 focus-visible:outline-[#0066cc] rounded"
+              >
+                Sign In
+              </Link>
+              <Link 
+                to="/signup" 
+                className="px-3.5 py-1.5 rounded-full bg-[#0066cc] text-white font-medium hover:bg-[#0077ed] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0066cc] shadow-sm"
+              >
+                Get Started
+              </Link>
+            </div>
+          )}
         </div>
       </nav>
     </header>
   )
 }
-
