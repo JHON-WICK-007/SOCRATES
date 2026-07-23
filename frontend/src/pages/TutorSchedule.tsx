@@ -476,7 +476,7 @@ export default function TutorSchedule() {
                               e.stopPropagation()
                               setHoveredDay(null)
                             }}
-                            className="p-1 rounded-full text-[#7a7a7a] hover:text-[#1d1d1f] hover:bg-[#f5f5f7] cursor-pointer"
+                            className="p-1.5 rounded-full text-[#7a7a7a] hover:text-[#1d1d1f] hover:bg-[#f5f5f7] active:bg-[#e8e8ed] transition-colors duration-150 cursor-pointer select-none shrink-0 transform-gpu"
                             title="Close details"
                             aria-label="Close popover"
                           >
@@ -598,7 +598,7 @@ export default function TutorSchedule() {
                 <button
                   type="button"
                   onClick={() => setSelectedDay(null)}
-                  className="p-1.5 rounded-full text-[#7a7a7a] hover:text-[#1d1d1f] hover:bg-[#f5f5f7] transition-colors cursor-pointer shrink-0"
+                  className="p-1.5 rounded-full text-[#7a7a7a] hover:text-[#1d1d1f] hover:bg-[#f5f5f7] active:bg-[#e8e8ed] transition-colors duration-150 cursor-pointer select-none shrink-0 transform-gpu"
                   title="Close modal"
                   aria-label="Close modal"
                 >
