@@ -99,12 +99,12 @@ const MOCK_TUTORS = [
 ]
 
 const MOCK_STUDENT_NAMES = [
-  'Sarah Jenkins (CS Scholar)',
-  'Alex Rivera (Math Major)',
-  'Elena Rostova (PhD Candidate)',
-  'Michael Chang (Engineering)',
-  'David Miller (Pre-Med)',
-  'Sophia Chen (Data Science)'
+  'Sarah Jenkins',
+  'Alex Rivera',
+  'Elena Rostova',
+  'Michael Chang',
+  'David Miller',
+  'Sophia Chen'
 ]
 
 interface TimeSlot {
@@ -513,11 +513,11 @@ export default function TutorSchedule() {
 
                             {slot.isBooked ? (
                               <div 
-                                title={slot.bookedBy}
+                                title={slot.bookedBy?.replace(/\s*\([^)]*\)/g, '')}
                                 className="flex items-center gap-1.5 text-[10px] text-red-900 font-medium truncate pt-0.5 cursor-help"
                               >
                                 <Lock size={10} className="text-red-600 shrink-0" />
-                                <span className="truncate">Booked by <strong className="font-semibold text-red-950">{slot.bookedBy}</strong></span>
+                                <span className="truncate">Booked by <strong className="font-semibold text-red-950">{slot.bookedBy?.replace(/\s*\([^)]*\)/g, '')}</strong></span>
                               </div>
                             ) : (
                               <div className="flex items-center gap-1.5 text-[10px] text-[#525252] font-medium truncate pt-0.5">
