@@ -41,14 +41,20 @@ export default function FAQ() {
   return (
     <section className="py-24 sm:py-32 bg-white text-[#1d1d1f]">
       <div className="max-w-4xl mx-auto px-6">
-        <div className="text-center max-w-2xl mx-auto mb-20 space-y-4">
+        <motion.div 
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-2xl mx-auto mb-20 space-y-4"
+        >
           <h2 className="text-3xl sm:text-5xl font-semibold tracking-tight text-[#1d1d1f]">
             Frequently Asked Questions.
           </h2>
           <p className="text-base sm:text-lg text-[#7a7a7a]">
             Everything you need to know about the SOCRATES platform.
           </p>
-        </div>
+        </motion.div>
 
         <div className="space-y-4">
           {faqs.map((faq, index) => {

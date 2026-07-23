@@ -109,14 +109,20 @@ export default function WhySocrates() {
     <section id="why-socrates" className="py-24 sm:py-32 bg-white text-[#1d1d1f]">
       <div className="max-w-6xl mx-auto px-6">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-3xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-[#1d1d1f] mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-3xl mx-auto mb-20 space-y-4"
+        >
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-[#1d1d1f]">
             Why SOCRATES.
           </h2>
-          <p className="text-lg sm:text-xl text-[#7a7a7a] font-normal leading-relaxed">
+          <p className="text-base sm:text-lg text-[#7a7a7a] font-normal leading-relaxed">
             The first learning platform combining the instant power of Socratic artificial intelligence with high-impact human mentorship.
           </p>
-        </div>
+        </motion.div>
 
         {/* 4 Feature Blocks */}
         <div className="space-y-12 sm:space-y-16">

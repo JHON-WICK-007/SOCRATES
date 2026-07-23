@@ -26,14 +26,20 @@ export default function Categories() {
   return (
     <section className="py-24 sm:py-32 bg-white text-[#1d1d1f]">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+        <motion.div 
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-3xl mx-auto mb-16 space-y-4"
+        >
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-[#1d1d1f]">
             Explore Categories.
           </h2>
           <p className="text-base sm:text-lg text-[#7a7a7a]">
             Dive deep into specialized disciplines with certified academic tutors and AI models.
           </p>
-        </div>
+        </motion.div>
 
         {/* Responsive Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -21,14 +21,20 @@ export default function Testimonials() {
   return (
     <section className="py-24 sm:py-32 bg-[#f5f5f7] text-[#1d1d1f] border-t border-[#e0e0e0]">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
+        <motion.div 
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-3xl mx-auto mb-20 space-y-4"
+        >
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-[#1d1d1f]">
             Student Success.
           </h2>
           <p className="text-lg text-[#7a7a7a]">
             Hear how learners around the world master difficult subjects.
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
           {testimonials.map((t, index) => (
