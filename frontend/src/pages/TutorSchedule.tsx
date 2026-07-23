@@ -94,14 +94,25 @@ const MOCK_TUTORS = [
   }
 ]
 
+const MOCK_STUDENT_NAMES = [
+  'Sarah Jenkins (CS Scholar)',
+  'Alex Rivera (Math Major)',
+  'Elena Rostova (PhD Candidate)',
+  'Michael Chang (Engineering)',
+  'David Miller (Pre-Med)',
+  'Sophia Chen (Data Science)'
+]
+
 interface TimeSlot {
   time: string
   subject: string
   isBooked: boolean
+  bookedBy?: string
 }
 
 interface DaySchedule {
   date: number
+  dayOfWeek: number
   fullDateStr: string
   status: 'green' | 'yellow' | 'red'
   label: string
@@ -163,19 +174,21 @@ export default function TutorSchedule() {
       const slots: TimeSlot[] = []
       const availableSubjects = tutor.subjects
 
-      if (status !== 'red') {
-        const slotTimes = status === 'green' 
-          ? ['09:00 AM', '11:30 AM', '02:00 PM', '04:30 PM', '07:00 PM']
-          : ['10:00 AM', '03:00 PM']
+      const slotTimes = status === 'green' 
+        ? ['09:00 AM', '11:30 AM', '02:00 PM', '04:30 PM']
+        : status === 'yellow'
+        ? ['10:00 AM', '01:30 PM', '04:00 PM']
+        : ['09:00 AM', '11:30 AM', '02:00 PM', '04:30 PM']
 
-        slotTimes.forEach((time, idx) => {
-          slots.push({
-            time,
-            subject: availableSubjects[idx % availableSubjects.length],
-            isBooked: status === 'yellow' && idx === 1
-          })
+      slotTimes.forEach((time, idx) => {
+        const isSlotBooked = status === 'red' || (status === 'yellow' && idx === 1)
+        slots.push({
+          time,
+          subject: availableSubjects[idx % availableSubjects.length],
+          isBooked: isSlotBooked,
+          bookedBy: isSlotBooked ? MOCK_STUDENT_NAMES[(dayNum + idx) % MOCK_STUDENT_NAMES.length] : undefined
         })
-      }
+      })
 
       const dateObj = new Date(year, month, dayNum)
       const dateString = dateObj.toLocaleDateString('en-US', {
@@ -187,6 +200,7 @@ export default function TutorSchedule() {
 
       days.push({
         date: dayNum,
+        dayOfWeek,
         fullDateStr: dateString,
         status,
         label,
@@ -417,9 +431,11 @@ export default function TutorSchedule() {
                     </div>
                   </button>
 
-                  {/* HOVER TOOLTIP */}
+                  {/* SIDE HOVER TOOLTIP (Right/Left Positioned) */}
                   {hoveredDay?.date === day.date && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 w-56 p-3 bg-white text-[#1d1d1f] text-xs rounded-2xl shadow-xl z-50 pointer-events-none space-y-2 border border-[#e5e5e7] animate-in fade-in zoom-in-95 duration-150">
+                    <div className={`absolute top-1/2 -translate-y-1/2 ${
+                      day.dayOfWeek >= 5 ? 'right-full mr-3' : 'left-full ml-3'
+                    } w-64 p-3.5 bg-white text-[#1d1d1f] text-xs rounded-2xl shadow-2xl z-50 pointer-events-none space-y-2 border border-[#e5e5e7] animate-in fade-in duration-150`}>
                       <div className="flex items-center justify-between border-b border-[#f0f0f2] pb-2">
                         <span className="font-semibold text-[#1d1d1f] text-xs">{day.fullDateStr}</span>
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
@@ -427,40 +443,63 @@ export default function TutorSchedule() {
                           day.status === 'yellow' ? 'bg-amber-50 text-amber-700 border-amber-200' :
                           'bg-rose-50 text-rose-600 border-rose-200'
                         }`}>
-                          {day.status === 'green' ? 'Available' : day.status === 'yellow' ? 'Limited' : 'Booked'}
+                          {day.status === 'green' ? 'Available' : day.status === 'yellow' ? 'Limited' : 'Fully Booked'}
                         </span>
                       </div>
 
-                      {day.status !== 'red' ? (
-                        <div className="space-y-1.5 pt-0.5">
-                          <p className="text-[10px] text-[#7a7a7a] font-medium uppercase tracking-wider">Open Slots & Taught Topics:</p>
-                          {day.slots.map((slot, sIdx) => (
-                            <div 
-                              key={sIdx} 
-                              className={`flex items-center justify-between p-1.5 rounded-xl border text-[11px] ${
-                                slot.isBooked ? 'bg-[#f5f5f7] border-[#e5e5e7] opacity-50 line-through text-[#7a7a7a]' : 'bg-[#fafafc] border-[#e8e8ed] text-[#1d1d1f]'
-                              }`}
-                            >
-                              <span className="flex items-center gap-1 font-mono font-medium text-[10px]">
-                                <Clock size={10} className="text-[#0066cc]" />
+                      <div className="space-y-1.5 pt-0.5">
+                        <p className="text-[10px] text-[#7a7a7a] font-semibold uppercase tracking-wider">
+                          Time Slots & Reservations:
+                        </p>
+                        {day.slots.map((slot, sIdx) => (
+                          <div 
+                            key={sIdx} 
+                            className={`p-2 rounded-xl border text-[11px] space-y-0.5 ${
+                              slot.isBooked 
+                                ? 'bg-rose-50/50 border-rose-200/70 text-rose-950' 
+                                : 'bg-[#fafafc] border-[#e8e8ed] text-[#1d1d1f]'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="flex items-center gap-1 font-mono font-semibold text-[10px]">
+                                <Clock size={10} className={slot.isBooked ? 'text-rose-500' : 'text-[#0066cc]'} />
                                 {slot.time}
                               </span>
-                              <span className="truncate max-w-[100px] text-[10px] text-[#0066cc] bg-[#0066cc]/8 px-1.5 py-0.5 rounded-md font-medium">
-                                {slot.subject.split(' ')[0]}
+                              <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded ${
+                                slot.isBooked ? 'bg-rose-100/80 text-rose-700' : 'bg-emerald-100/70 text-emerald-700'
+                              }`}>
+                                {slot.isBooked ? 'Reserved' : 'Open'}
                               </span>
                             </div>
-                          ))}
-                          <p className="text-[10px] text-[#0066cc] pt-1 font-semibold text-center">Click date to book slot</p>
-                        </div>
-                      ) : (
-                        <p className="text-[11px] text-rose-600 pt-1 text-center font-medium">
-                          No open slots available on this date.
-                        </p>
-                      )}
 
-                      {/* Tooltip Pointer Arrow */}
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[1px] border-4 border-transparent border-t-[#e5e5e7]" />
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-[2px] border-4 border-transparent border-t-white" />
+                            {slot.isBooked ? (
+                              <div className="text-[10px] text-rose-700 font-medium truncate pt-0.5">
+                                🔒 Booked by <span className="font-semibold text-rose-900">{slot.bookedBy}</span>
+                              </div>
+                            ) : (
+                              <div className="text-[10px] text-[#0066cc] font-medium truncate pt-0.5">
+                                📚 Subject: <span className="font-semibold">{slot.subject}</span>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                        {day.status !== 'red' && (
+                          <p className="text-[10px] text-[#0066cc] pt-1 font-semibold text-center">Click date cell to select slot</p>
+                        )}
+                      </div>
+
+                      {/* Tooltip Side Pointer Arrow */}
+                      {day.dayOfWeek >= 5 ? (
+                        <>
+                          <div className="absolute top-1/2 -translate-y-1/2 left-full -ml-[1px] border-4 border-transparent border-l-[#e5e5e7]" />
+                          <div className="absolute top-1/2 -translate-y-1/2 left-full -ml-[2px] border-4 border-transparent border-l-white" />
+                        </>
+                      ) : (
+                        <>
+                          <div className="absolute top-1/2 -translate-y-1/2 right-full -mr-[1px] border-4 border-transparent border-r-[#e5e5e7]" />
+                          <div className="absolute top-1/2 -translate-y-1/2 right-full -mr-[2px] border-4 border-transparent border-r-white" />
+                        </>
+                      )}
                     </div>
                   )}
                 </div>
