@@ -620,7 +620,7 @@ export default function TutorSchedule() {
                           type="button"
                           disabled={slot.isBooked}
                           onClick={() => setSelectedSlot(slot)}
-                          className={`p-3 rounded-2xl border text-xs font-medium text-left flex flex-col justify-between gap-1.5 transition-all cursor-pointer select-none ${
+                          className={`p-3.5 rounded-2xl border text-xs font-medium text-left flex items-center justify-between gap-3 transition-colors duration-150 cursor-pointer select-none transform-gpu ${
                             slot.isBooked
                               ? 'bg-[#f5f5f7] border-[#e0e0e0] text-[#a1a1a6] cursor-not-allowed opacity-60'
                               : isSelected
@@ -628,17 +628,24 @@ export default function TutorSchedule() {
                               : 'bg-white border-[#e5e5e7] text-[#1d1d1f] hover:border-[#0066cc] hover:bg-[#0066cc]/5'
                           }`}
                         >
-                          <div className="flex items-center justify-between font-sans font-bold text-xs tracking-tight">
-                            <span>{slot.time}</span>
+                          <div className="space-y-1 min-w-0 flex-1">
+                            <div className="font-sans font-bold text-xs tracking-tight">
+                              {slot.time}
+                            </div>
+                            <div className={`text-[11px] font-semibold truncate ${isSelected ? 'text-white/95' : 'text-[#3a3a3c]'}`}>
+                              {slot.subject}
+                            </div>
+                          </div>
+
+                          <div className="shrink-0 flex items-center justify-center">
                             {isSelected ? (
-                              <CheckCircle2 size={13} className="text-white" />
+                              <CheckCircle2 size={18} className="text-white shrink-0" />
                             ) : (
-                              <span className="text-[10px] font-sans font-semibold text-[#6e6e73]">60m</span>
+                              <span className="text-[10px] font-sans font-semibold px-2 py-0.5 rounded-full bg-[#f5f5f7] text-[#6e6e73] border border-[#e5e5e7] shrink-0">
+                                60m
+                              </span>
                             )}
                           </div>
-                          <span className={`text-[11px] font-semibold truncate ${isSelected ? 'text-white/95' : 'text-[#3a3a3c]'}`}>
-                            {slot.subject}
-                          </span>
                         </button>
                       )
                     })}
