@@ -9,6 +9,7 @@ import VerifyOTP from './pages/VerifyOTP'
 import ResetPassword from './pages/ResetPassword'
 import Profile from './pages/Profile'
 import Tutors from './pages/Tutors'
+import TutorSchedule from './pages/TutorSchedule'
 import './App.css'
 
 function ScrollToTop() {
@@ -36,6 +37,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/tutors" element={<Tutors />} />
+        <Route path="/tutors/:tutorId/schedule" element={<TutorSchedule />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />

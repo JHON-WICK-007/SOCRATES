@@ -1,6 +1,7 @@
 import { motion, Variants } from 'framer-motion'
 import {
   BookOpen,
+  Calendar,
   DollarSign,
   Filter,
   Search,
@@ -12,6 +13,7 @@ import {
   X
 } from 'lucide-react'
 import React, { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import CustomDropdown, { DropdownOption } from '../components/CustomDropdown'
 import Navbar from '../components/Navbar'
@@ -129,6 +131,7 @@ const INITIAL_TOP_TUTORS: ExtendedTutor[] = [
 ]
 
 export default function Tutors() {
+  const navigate = useNavigate()
   const [tutorsList, setTutorsList] = useState<ExtendedTutor[]>(INITIAL_TOP_TUTORS)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedSubject, setSelectedSubject] = useState('All')
@@ -492,11 +495,11 @@ export default function Tutors() {
                   </div>
 
                   <button
-                    onClick={() => setSelectedTutorForBooking(tutor)}
+                    onClick={() => navigate(`/tutors/${tutor.id}/schedule`)}
                     className="px-4 py-2 rounded-xl bg-[#0066cc] hover:bg-[#0077ed] text-white text-xs font-semibold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95"
                   >
-                    <Video size={13} />
-                    Book Session
+                    <Calendar size={13} />
+                    Check Availability
                   </button>
                 </div>
               </motion.div>
