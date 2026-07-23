@@ -308,7 +308,7 @@ export default function TutorSchedule() {
               <span className="text-[#1d1d1f]">Limited</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+              <span className="w-2.5 h-2.5 rounded-full bg-red-600" />
               <span className="text-[#1d1d1f]">Booked</span>
             </div>
           </div>
@@ -416,14 +416,14 @@ export default function TutorSchedule() {
               const statusStyles = {
                 green: 'bg-emerald-50/70 border-emerald-200/80 text-emerald-950 hover:bg-emerald-100/80 hover:border-emerald-300 cursor-pointer',
                 yellow: 'bg-amber-50/70 border-amber-200/80 text-amber-950 hover:bg-amber-100/80 hover:border-amber-300 cursor-pointer',
-                red: 'bg-rose-50/50 border-rose-200/50 text-rose-400 cursor-not-allowed opacity-75',
+                red: 'bg-red-50/60 border-red-200 text-red-950 cursor-not-allowed opacity-80',
                 past: 'bg-[repeating-linear-gradient(45deg,#f5f5f7,#f5f5f7_6px,#e8e8ed_6px,#e8e8ed_12px)] border-[#d2d2d7] text-[#8e8e93] opacity-60 cursor-not-allowed'
               }
 
               const badgeStyles = {
                 green: 'bg-emerald-500',
                 yellow: 'bg-amber-500',
-                red: 'bg-rose-500',
+                red: 'bg-red-600',
                 past: 'bg-gray-400'
               }
 
@@ -466,7 +466,7 @@ export default function TutorSchedule() {
                             day.isPast ? 'bg-gray-100 text-gray-600 border-gray-200' :
                             day.status === 'green' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
                             day.status === 'yellow' ? 'bg-amber-50 text-amber-700 border-amber-200' :
-                            'bg-rose-50 text-rose-600 border-rose-200'
+                            'bg-red-50 text-red-700 border-red-200'
                           }`}>
                             {day.isPast ? 'Passed' : day.status === 'green' ? 'Available' : day.status === 'yellow' ? 'Limited' : 'Fully Booked'}
                           </span>
@@ -494,17 +494,17 @@ export default function TutorSchedule() {
                             key={sIdx} 
                             className={`p-2.5 rounded-xl border text-[11px] space-y-1 min-h-[46px] flex flex-col justify-center ${
                               slot.isBooked 
-                                ? 'bg-rose-50/50 border-rose-200/70 text-rose-950' 
+                                ? 'bg-red-50/60 border-red-200/80 text-red-950' 
                                 : 'bg-[#fafafc] border-[#e8e8ed] text-[#1d1d1f]'
                             }`}
                           >
                             <div className="flex items-center justify-between">
                               <span className="flex items-center gap-1 font-mono font-semibold text-[11px]">
-                                <Clock size={11} className={slot.isBooked ? 'text-rose-500' : 'text-[#0066cc]'} />
+                                <Clock size={11} className={slot.isBooked ? 'text-red-600' : 'text-[#0066cc]'} />
                                 {slot.time}
                               </span>
                               <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
-                                slot.isBooked ? 'bg-rose-100/80 text-rose-700' : 'bg-emerald-100/70 text-emerald-700'
+                                slot.isBooked ? 'bg-red-100 text-red-800 border border-red-200' : 'bg-emerald-100/70 text-emerald-700'
                               }`}>
                                 {slot.isBooked ? 'Reserved' : 'Open'}
                               </span>
@@ -513,10 +513,10 @@ export default function TutorSchedule() {
                             {slot.isBooked ? (
                               <div 
                                 title={slot.bookedBy}
-                                className="flex items-center gap-1.5 text-[10px] text-rose-800 font-medium truncate pt-0.5 cursor-help"
+                                className="flex items-center gap-1.5 text-[10px] text-red-900 font-medium truncate pt-0.5 cursor-help"
                               >
-                                <Lock size={10} className="text-rose-500 shrink-0" />
-                                <span className="truncate">Booked by <strong className="font-semibold text-rose-950">{slot.bookedBy}</strong></span>
+                                <Lock size={10} className="text-red-600 shrink-0" />
+                                <span className="truncate">Booked by <strong className="font-semibold text-red-950">{slot.bookedBy}</strong></span>
                               </div>
                             ) : (
                               <div className="flex items-center gap-1.5 text-[10px] text-[#525252] font-medium truncate pt-0.5">
