@@ -8,6 +8,7 @@ import ForgotPassword from './pages/ForgotPassword'
 import VerifyOTP from './pages/VerifyOTP'
 import ResetPassword from './pages/ResetPassword'
 import Profile from './pages/Profile'
+import Tutors from './pages/Tutors'
 import './App.css'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <Toaster position="top-right" richColors duration={1800} closeButton />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/tutors" element={<Tutors />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
