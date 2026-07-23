@@ -54,13 +54,13 @@ export default function Hero() {
       </div>
 
       <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 max-w-4xl mx-auto text-center flex flex-col items-center w-full"
       >
         {/* Headline */}
-        <h1 className="mt-4 mb-6 text-4xl sm:text-6xl md:text-7xl lg:text-[76px] font-semibold tracking-[-0.035em] leading-[1.08] text-[#1d1d1f]">
+        <h1 className="mt-4 mb-6 text-4xl sm:text-6xl md:text-7xl lg:text-[76px] font-semibold tracking-tight leading-[1.08] text-[#1d1d1f]">
           <span>Learn from the source.</span>
           <br className="hidden sm:inline" />
           <span className="block mt-1 sm:mt-2 text-[#1d1d1f]">
@@ -69,7 +69,7 @@ export default function Hero() {
         </h1>
 
         {/* Description */}
-        <p className="max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-[#7a7a7a] font-normal leading-relaxed tracking-normal">
+        <p className="max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-[#7a7a7a] font-normal leading-relaxed">
           Master every subject through personalized tutoring, AI-powered guidance, live video sessions, and collaborative learning—all in one platform.
         </p>
 

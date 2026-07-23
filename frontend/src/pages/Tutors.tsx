@@ -267,8 +267,13 @@ export default function Tutors() {
       <Navbar />
 
       {/* Hero Header Section */}
-      <section className="relative z-10 max-w-5xl mx-auto px-6 pt-12 pb-10 text-center flex flex-col items-center w-full">
-        <h1 className="mt-2 mb-4 text-4xl sm:text-6xl md:text-[68px] font-semibold tracking-[-0.035em] leading-[1.08] text-[#1d1d1f]">
+      <motion.section
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-10 max-w-5xl mx-auto px-6 pt-12 pb-10 text-center flex flex-col items-center w-full"
+      >
+        <h1 className="mt-2 mb-4 text-4xl sm:text-6xl md:text-[68px] font-semibold tracking-tight leading-[1.08] text-[#1d1d1f]">
           <span>Find your mentor.</span>
           <br className="hidden sm:inline" />
           <span className="block mt-1 sm:mt-2 text-[#0066cc]">
@@ -276,10 +281,10 @@ export default function Tutors() {
           </span>
         </h1>
 
-        <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#7a7a7a] font-normal leading-relaxed tracking-normal">
+        <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#7a7a7a] font-normal leading-relaxed">
           Connect 1-on-1 with verified academic scholars, PhD researchers, and peer educators for live Socratic tutoring and code reviews.
         </p>
-      </section>
+      </motion.section>
 
       {/* Unified Search & Tutor Grid Motion Container */}
       <motion.div
