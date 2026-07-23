@@ -134,15 +134,15 @@ export default function CustomDropdown<T extends string | number>({
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
-        <span className="flex items-center gap-2 truncate">
+        <span className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
           {icon && <span className="text-[#0066cc] shrink-0">{icon}</span>}
           {selectedOption ? (
-            <span className="truncate flex items-center gap-1.5">
+            <span className="whitespace-nowrap flex items-center gap-1.5">
               {selectedOption.icon && <span className="shrink-0">{selectedOption.icon}</span>}
-              {selectedOption.label}
+              <span className="whitespace-nowrap">{selectedOption.label}</span>
             </span>
           ) : (
-            <span className="text-[#86868b] truncate">{placeholder}</span>
+            <span className="text-[#86868b] whitespace-nowrap">{placeholder}</span>
           )}
         </span>
 

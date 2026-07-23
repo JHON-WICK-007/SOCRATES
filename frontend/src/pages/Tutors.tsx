@@ -382,7 +382,7 @@ export default function Tutors() {
                   options={subjectDropdownOptions}
                   value={selectedSubject}
                   onChange={(val: string) => setSelectedSubject(val)}
-                  buttonClassName="py-1.5 w-[210px] sm:w-[220px] justify-between"
+                  buttonClassName="py-1.5 w-[220px] sm:w-[235px] justify-between"
                   align="center"
                 />
 
@@ -409,7 +409,7 @@ export default function Tutors() {
                   options={ratingOptions}
                   value={minRating}
                   onChange={(val: number) => setMinRating(val)}
-                  buttonClassName="py-1.5 w-[130px] sm:w-[135px] justify-between"
+                  buttonClassName="py-1.5 w-[145px] sm:w-[155px] justify-between"
                   align="center"
                 />
 
@@ -417,7 +417,7 @@ export default function Tutors() {
                   options={priceOptions}
                   value={maxPrice}
                   onChange={(val: number) => setMaxPrice(val)}
-                  buttonClassName="py-1.5 w-[145px] sm:w-[155px] justify-between"
+                  buttonClassName="py-1.5 w-[155px] sm:w-[165px] justify-between"
                   align="center"
                 />
               </div>
