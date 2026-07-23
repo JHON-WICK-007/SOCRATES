@@ -4,7 +4,7 @@ export interface UserProfile {
   _id: string
   name: string
   email: string
-  role: 'student' | 'tutor' | 'admin'
+  role: 'student' | 'tutor' | 'both' | 'admin'
   avatar: string
   bio: string
   subjects: string[]

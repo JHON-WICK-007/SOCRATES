@@ -17,14 +17,15 @@ import {
   TrendingUp,
   Bookmark,
   LogOut,
+  Repeat,
 } from 'lucide-react'
-import { useAuthStore } from '../store/useAuthStore'
+import { useAuthStore, ProfilePerspective } from '../store/useAuthStore'
 import { updateUserProfileApi } from '../services/api'
 import { toast } from 'sonner'
 import Navbar from '../components/Navbar'
 
 export default function Profile() {
-  const { user, updateUser, activePerspective, setPerspective, logout } = useAuthStore()
+  const { user, updateUser, logout } = useAuthStore()
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -33,10 +34,24 @@ export default function Profile() {
     navigate('/')
   }
 
+  // Active Role/Perspective derived directly from user object (defaulting to 'both')
+  const userRole = user?.role || 'both'
+  const [viewPerspective, setViewPerspective] = useState<ProfilePerspective>(
+    userRole === 'admin' ? 'both' : (userRole as ProfilePerspective)
+  )
+
+  // Sync perspective if user.role changes
+  useEffect(() => {
+    if (user?.role && user.role !== 'admin') {
+      setViewPerspective(user.role as ProfilePerspective)
+    }
+  }, [user?.role])
+
   // Edit Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [formData, setFormData] = useState({
     name: user?.name || '',
+    role: user?.role || 'both',
     bio: user?.bio || '',
     hourlyRate: user?.hourlyRate || 45,
     avatar: user?.avatar || '',
@@ -48,6 +63,7 @@ export default function Profile() {
     if (user) {
       setFormData({
         name: user.name,
+        role: user.role,
         bio: user.bio,
         hourlyRate: user.hourlyRate || 45,
         avatar: user.avatar,
@@ -67,6 +83,7 @@ export default function Profile() {
 
     const updatePayload = {
       name: formData.name,
+      role: formData.role as 'student' | 'tutor' | 'both',
       bio: formData.bio,
       hourlyRate: Number(formData.hourlyRate),
       avatar: formData.avatar,
@@ -133,9 +150,27 @@ export default function Profile() {
                   )}
                 </div>
 
-                <p className="text-xs font-medium text-[#7a7a7a]">
-                  {user?.email || 'alex.rivera@socrates.edu'}
-                </p>
+                <div className="flex items-center gap-2 text-xs font-medium">
+                  <span className="text-[#7a7a7a]">
+                    {user?.email || 'alex.rivera@socrates.edu'}
+                  </span>
+                  <span className="text-[#e0e0e0]">•</span>
+                  {userRole === 'student' && (
+                    <span className="px-2.5 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-[#0066cc] font-semibold">
+                      Student Account
+                    </span>
+                  )}
+                  {userRole === 'tutor' && (
+                    <span className="px-2.5 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-700 font-semibold">
+                      Tutor Account
+                    </span>
+                  )}
+                  {userRole === 'both' && (
+                    <span className="px-2.5 py-0.5 rounded-md bg-purple-50 border border-purple-200 text-purple-700 font-semibold flex items-center gap-1">
+                      <Repeat size={11} /> Peer-to-Peer Account (Both)
+                    </span>
+                  )}
+                </div>
 
                 <p className="text-xs text-[#525252] max-w-xl leading-relaxed">
                   {user?.bio ||
@@ -144,42 +179,52 @@ export default function Profile() {
               </div>
             </div>
 
-            {/* Quick Actions Right */}
+            {/* Account Role Selector / Edit Trigger Right */}
             <div className="flex flex-col items-end gap-3 w-full md:w-auto">
-              <div className="flex items-center gap-1.5 p-1.5 bg-[#f5f5f7] rounded-2xl border border-[#e0e0e0]">
+              <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setPerspective('student')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
-                    activePerspective === 'student'
-                      ? 'bg-[#0066cc] text-white shadow-sm'
-                      : 'text-[#525252] hover:text-[#1d1d1f] hover:bg-white/60'
-                  }`}
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="px-4 py-2 rounded-xl bg-[#0066cc] hover:bg-[#0077ed] text-white font-medium text-xs transition-all shadow-md shadow-[#0066cc]/20 flex items-center gap-1.5 cursor-pointer"
                 >
-                  <GraduationCap size={14} /> Student View
-                </button>
-
-                <button
-                  onClick={() => setPerspective('tutor')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
-                    activePerspective === 'tutor'
-                      ? 'bg-[#0066cc] text-white shadow-sm'
-                      : 'text-[#525252] hover:text-[#1d1d1f] hover:bg-white/60'
-                  }`}
-                >
-                  <UserCheck size={14} /> Tutor View
-                </button>
-
-                <button
-                  onClick={() => setPerspective('both')}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 cursor-pointer ${
-                    activePerspective === 'both'
-                      ? 'bg-[#0066cc] text-white shadow-sm'
-                      : 'text-[#525252] hover:text-[#1d1d1f] hover:bg-white/60'
-                  }`}
-                >
-                  <Layers size={14} /> Combined (Both)
+                  <Edit3 size={14} /> Edit Profile & Role
                 </button>
               </div>
+
+              {/* View Perspective Toggles (For Hybrid Users) */}
+              {userRole === 'both' && (
+                <div className="flex items-center gap-1 p-1 bg-[#f5f5f7] rounded-xl border border-[#e0e0e0]">
+                  <button
+                    onClick={() => setViewPerspective('student')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      viewPerspective === 'student'
+                        ? 'bg-[#0066cc] text-white shadow-xs'
+                        : 'text-[#525252] hover:text-[#1d1d1f]'
+                    }`}
+                  >
+                    Student View
+                  </button>
+                  <button
+                    onClick={() => setViewPerspective('tutor')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      viewPerspective === 'tutor'
+                        ? 'bg-[#0066cc] text-white shadow-xs'
+                        : 'text-[#525252] hover:text-[#1d1d1f]'
+                    }`}
+                  >
+                    Tutor View
+                  </button>
+                  <button
+                    onClick={() => setViewPerspective('both')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                      viewPerspective === 'both'
+                        ? 'bg-[#0066cc] text-white shadow-xs'
+                        : 'text-[#525252] hover:text-[#1d1d1f]'
+                    }`}
+                  >
+                    Combined Both
+                  </button>
+                </div>
+              )}
 
               <div className="text-[11px] text-[#86868b] flex items-center gap-1.5">
                 <Clock size={12} /> Member since{' '}
@@ -192,13 +237,13 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* PERSPECTIVE SECTION 1: STUDENT VIEW (IF SELECTED OR BOTH) */}
-        {(activePerspective === 'both' || activePerspective === 'student') && (
+        {/* PERSPECTIVE SECTION 1: STUDENT VIEW (IF STUDENT OR BOTH) */}
+        {(viewPerspective === 'both' || viewPerspective === 'student') && (
           <section className="space-y-6">
             <div className="flex items-center justify-between border-b border-[#e5e5e7] pb-3">
               <div>
                 <span className="text-[11px] uppercase tracking-widest font-semibold text-[#0066cc]">
-                  Perspective 01
+                  Learner Perspective
                 </span>
                 <h2 className="text-xl font-display font-bold text-[#1d1d1f] flex items-center gap-2">
                   <GraduationCap className="text-[#0066cc]" size={22} /> Student
@@ -267,7 +312,7 @@ export default function Profile() {
                 <h3 className="text-base font-display font-semibold text-[#1d1d1f] flex items-center justify-between">
                   <span>Enrolled Learning Subjects</span>
                   <span className="text-xs text-[#7a7a7a] font-normal">
-                    4 Active
+                    {user?.subjects?.length || 0} Active
                   </span>
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -283,7 +328,7 @@ export default function Profile() {
                     ))
                   ) : (
                     <span className="text-xs text-[#86868b]">
-                      No subjects added yet.
+                      No learning subjects added yet.
                     </span>
                   )}
                 </div>
@@ -327,13 +372,13 @@ export default function Profile() {
           </section>
         )}
 
-        {/* PERSPECTIVE SECTION 2: TUTOR VIEW (IF SELECTED OR BOTH) */}
-        {(activePerspective === 'both' || activePerspective === 'tutor') && (
+        {/* PERSPECTIVE SECTION 2: TUTOR VIEW (IF TUTOR OR BOTH) */}
+        {(viewPerspective === 'both' || viewPerspective === 'tutor') && (
           <section className="space-y-6 pt-4">
             <div className="flex items-center justify-between border-b border-[#e5e5e7] pb-3">
               <div>
                 <span className="text-[11px] uppercase tracking-widest font-semibold text-[#0066cc]">
-                  Perspective 02
+                  Instructor Perspective
                 </span>
                 <h2 className="text-xl font-display font-bold text-[#1d1d1f] flex items-center gap-2">
                   <UserCheck className="text-emerald-600" size={22} /> Verified
@@ -490,26 +535,48 @@ export default function Profile() {
               </h3>
               <button
                 onClick={() => setIsEditModalOpen(false)}
-                className="p-1.5 rounded-xl text-[#7a7a7a] hover:text-[#1d1d1f] hover:bg-[#f5f5f7] transition-colors"
+                className="p-1.5 rounded-xl text-[#7a7a7a] hover:text-[#1d1d1f] hover:bg-[#f5f5f7] transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
             </div>
 
             <form onSubmit={handleSaveProfile} className="space-y-4 text-xs">
-              <div className="space-y-1.5">
-                <label className="text-[#525252] font-semibold block">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#f5f5f7] border border-[#e0e0e0] text-[#1d1d1f] placeholder-[#86868b] focus:outline-none focus:border-[#0066cc]"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-[#525252] font-semibold block">
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#f5f5f7] border border-[#e0e0e0] text-[#1d1d1f] focus:outline-none focus:border-[#0066cc]"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-[#525252] font-semibold block">
+                    Account Role / Identity
+                  </label>
+                  <select
+                    value={formData.role}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        role: e.target.value as 'student' | 'tutor' | 'both',
+                      })
+                    }
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#f5f5f7] border border-[#e0e0e0] text-[#1d1d1f] font-medium focus:outline-none focus:border-[#0066cc]"
+                  >
+                    <option value="student">🎓 Student Only (Learning)</option>
+                    <option value="tutor">👨‍🏫 Tutor Only (Teaching)</option>
+                    <option value="both">🔀 Peer-to-Peer (Both Learn & Teach)</option>
+                  </select>
+                </div>
               </div>
 
               <div className="space-y-1.5">
@@ -523,7 +590,7 @@ export default function Profile() {
                     setFormData({ ...formData, avatar: e.target.value })
                   }
                   placeholder="https://images.unsplash.com/..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-[#f5f5f7] border border-[#e0e0e0] text-[#1d1d1f] placeholder-[#86868b] focus:outline-none focus:border-[#0066cc]"
+                  className="w-full px-4 py-2.5 rounded-xl bg-[#f5f5f7] border border-[#e0e0e0] text-[#1d1d1f] focus:outline-none focus:border-[#0066cc]"
                 />
               </div>
 
@@ -545,7 +612,7 @@ export default function Profile() {
 
                 <div className="space-y-1.5">
                   <label className="text-[#525252] font-semibold block">
-                    Teaching / Learning Subjects (Comma separated)
+                    Teaching / Learning Subjects
                   </label>
                   <input
                     type="text"
