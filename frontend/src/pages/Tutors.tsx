@@ -463,10 +463,10 @@ export default function Tutors() {
                       <img
                         src={tutor.image}
                         alt={tutor.name}
-                        className="w-14 h-14 rounded-2xl object-cover border border-[#e5e5e7] shrink-0"
+                        className="w-14 h-14 rounded-2xl object-cover ring-2 ring-[#0066cc]/10 border border-[#d2d2d7] shadow-xs shrink-0"
                       />
 
-                      <div className="space-y-0.5 flex-1 min-w-0">
+                      <div className="space-y-1 flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-1.5">
                           <h3 className="text-base font-bold text-[#1d1d1f] group-hover:text-[#0066cc] transition-colors truncate tracking-tight">
                             {tutor.name}
@@ -478,21 +478,24 @@ export default function Tutors() {
                               </span>
                             )}
                             {tutor.isVerified && (
-                              <span title="Verified Educator" className="inline-flex items-center">
-                                <ShieldCheck size={16} className="text-[#0066cc]" />
+                              <span title="Verified Educator" className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#0066cc]/10 text-[#0066cc] border border-[#0066cc]/20 text-[10px] font-bold">
+                                <ShieldCheck size={12} className="text-[#0066cc]" />
+                                <span>Verified</span>
                               </span>
                             )}
                           </div>
                         </div>
 
-                        <p className="text-[13px] text-[#6e6e73] font-normal truncate leading-snug">
+                        <p className="text-[13px] text-[#6e6e73] font-medium truncate leading-snug">
                           {tutor.experience}
                         </p>
 
-                        <div className="flex items-center gap-1.5 text-[13px] pt-0.5">
-                          <Star size={13} className="text-amber-500 fill-amber-500 shrink-0" />
-                          <span className="font-semibold text-[#1d1d1f]">{tutor.rating}</span>
-                          <span className="text-[#6e6e73] font-normal">
+                        <div className="flex items-center gap-2 pt-0.5">
+                          <div className="inline-flex items-center gap-1 bg-amber-500/10 text-amber-700 border border-amber-500/25 px-2 py-0.5 rounded-lg text-xs font-semibold">
+                            <Star size={13} className="text-amber-500 fill-amber-500 shrink-0" />
+                            <span>{tutor.rating}</span>
+                          </div>
+                          <span className="text-xs text-[#6e6e73] font-normal">
                             ({typeof tutor.reviews === 'number' ? tutor.reviews : String(tutor.reviews).replace(/reviews/gi, '').trim()} reviews)
                           </span>
                         </div>
@@ -510,9 +513,9 @@ export default function Tutors() {
                       {tutor.bio}
                     </p>
 
-                    {/* Subject Badges */}
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {tutor.subjects.map((sub, idx) => (
+                    {/* Subject Badges (Max 3 visible + +N overflow tag) */}
+                    <div className="flex flex-wrap gap-1.5 pt-1 items-center">
+                      {tutor.subjects.slice(0, 3).map((sub, idx) => (
                         <span
                           key={idx}
                           className="px-2.5 py-1 rounded-lg bg-[#f5f5f7] border border-[#e5e5e7] text-[11px] font-medium text-[#525252]"
@@ -520,22 +523,27 @@ export default function Tutors() {
                           {sub}
                         </span>
                       ))}
+                      {tutor.subjects.length > 3 && (
+                        <span className="px-2 py-1 rounded-lg bg-[#f0f0f2] border border-[#e0e0e0] text-[10px] font-semibold text-[#6e6e73]">
+                          +{tutor.subjects.length - 3} more
+                        </span>
+                      )}
                     </div>
                   </div>
 
                   {/* Bottom Action Footer */}
                   <div className="pt-4 border-t border-[#f0f0f2] flex items-center justify-between gap-3 mt-4">
-                    <div>
-                      <span className="text-lg font-bold text-[#1d1d1f]">${tutor.hourlyRate}</span>
-                      <span className="text-xs text-[#7a7a7a]">/hr</span>
+                    <div className="flex items-baseline gap-0.5">
+                      <span className="text-xl font-bold text-[#1d1d1f] tracking-tight">${tutor.hourlyRate}</span>
+                      <span className="text-xs font-medium text-[#6e6e73]">/hr</span>
                     </div>
 
                     <button
                       onClick={() => navigate(`/tutors/${tutor.id}/schedule`)}
-                      className="px-4 py-2.5 rounded-xl bg-[#0066cc] hover:bg-[#0077ed] text-white text-xs font-semibold transition-colors shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-98 select-none"
+                      className="px-4 py-2.5 rounded-xl bg-[#0066cc] hover:bg-[#0077ed] text-white text-xs font-semibold transition-colors shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-98 select-none shrink-0"
                     >
                       <Calendar size={13} />
-                      Check Availability
+                      <span>Check Availability</span>
                     </button>
                   </div>
                 </motion.div>
